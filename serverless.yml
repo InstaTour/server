@@ -53,9 +53,21 @@ provider:
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
 
+plugins:
+  - serverless-apigw-binary
+  - serverless-plugin-tracing
+  - serverless-plugin-typescript
+  - serverless-offline
+
 # you can define service wide environment variables here
 #  environment:
 #    variable1: value1
+
+custom:
+  apigwBinary:
+    types: #list of mime-types
+      - 'image/jpeg'
+      - 'text/html'
 
 # you can add packaging information here
 #package:
@@ -109,10 +121,6 @@ functions:
 #    environment:
 #      variable2: value2
 
-plugins:
-  - serverless-plugin-tracing
-  - serverless-plugin-typescript
-  - serverless-offline
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:
