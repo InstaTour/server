@@ -1,0 +1,25 @@
+{
+  "name": "instatour",
+  "version": "1.0.0",
+  "description": "this service recommend places based on instagram tags",
+  "main": "handler.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InstaTour/server.git"
+  },
+  "keywords": [
+    "instagram",
+    "instatour"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/InstaTour/server/issues"
+  },
+  "homepage": "https://github.com/InstaTour/server#readme"
+}
