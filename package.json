@@ -10,6 +10,7 @@
   "devDependencies": {
     "serverless-apigw-binary": "^0.4.4",
     "serverless-offline": "^6.1.4",
+    "serverless-plugin-optimize": "^4.1.4-rc.1",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.8.3"

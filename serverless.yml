@@ -57,6 +57,7 @@ plugins:
   - serverless-apigw-binary
   - serverless-plugin-tracing
   - serverless-plugin-typescript
+  - serverless-plugin-optimize
   - serverless-offline
 
 # you can define service wide environment variables here
@@ -70,7 +71,8 @@ custom:
       - 'text/html'
 
 # you can add packaging information here
-#package:
+package:
+  individually: true
 #  include:
 #    - include-me.js
 #    - include-me-dir/**
