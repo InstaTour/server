@@ -5,6 +5,7 @@
   "main": "handler.js",
   "dependencies": {},
   "devDependencies": {
+    "serverless-offline": "^6.1.4",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.8.3"
   },

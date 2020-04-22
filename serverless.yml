@@ -103,6 +103,7 @@ functions:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-offline
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:
