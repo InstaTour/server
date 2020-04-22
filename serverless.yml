@@ -101,6 +101,8 @@ functions:
 #    environment:
 #      variable2: value2
 
+plugins:
+  - serverless-plugin-typescript
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:

@@ -4,7 +4,10 @@
   "description": "this service recommend places based on instagram tags",
   "main": "handler.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.8.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
