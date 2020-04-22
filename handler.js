@@ -1,6 +1,9 @@
 'use strict';
 
-module.exports.hello = async event => {
+const awsXRay = require('aws-xray-sdk');
+const awsSdk = awsXRay.captureAWS(require('aws-sdk'));
+
+module.exports.hello = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
