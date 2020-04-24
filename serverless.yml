@@ -54,6 +54,7 @@ provider:
 #            - "/*"
 
 plugins:
+  - serverless-aws-documentation
   - serverless-apigw-binary
   - serverless-plugin-tracing
   - serverless-plugin-typescript
