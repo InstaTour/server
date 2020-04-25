@@ -23,6 +23,7 @@ org: runaticmoon
 provider:
   name: aws
   runtime: nodejs12.x
+  stage: ${env:STAGE}
   region: ap-northeast-2
   profile: bean4
   tracing: true
@@ -54,6 +55,10 @@ provider:
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
 
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
 plugins:
   - serverless-aws-documentation
   - serverless-dotenv-plugin
@@ -62,10 +67,6 @@ plugins:
   - serverless-plugin-tracing
   - serverless-plugin-optimize
   - serverless-offline
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
 
 custom:
   apigwBinary:
