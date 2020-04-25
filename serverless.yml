@@ -1,0 +1,291 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: instatour
+# app and org for use with dashboard.serverless.com
+app: instatour
+org: runaticmoon
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${env:STAGE}
+  region: ap-northeast-2
+  profile: bean4
+  tracing: true
+  iamRoleStatements:
+    - Effect: 'Allow' # xray permissions (required)
+      Action:
+        - 'xray:PutTraceSegments'
+        - 'xray:PutTelemetryRecords'
+      Resource:
+        - '*'
+  deploymentBucket:
+    name: instatour-${env:STAGE}-serverlessdeploymentbucket
+    serverSideEncryption: AES256
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-aws-documentation
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
+  - serverless-apigw-binary
+  - serverless-plugin-tracing
+  - serverless-plugin-optimize
+  - serverless-domain-manager
+  - serverless-offline
+
+custom:
+  apigwBinary:
+    types: #list of mime-types
+      - 'image/jpeg'
+      - 'text/html'
+  customDomain:
+    domainName: api.instatour.tech
+    stage: ${env:STAGE}
+    basePath: ${env:API_VERSION}
+    certificateName: '*.instatour.tech'
+    createRoute53Record: true
+  documentation:
+    api:
+      info:
+        version: '2' # see note above about this being ignored
+        title: 'InstaTour API' # see note above about this being ignored
+        description: 'Inha Univ. Capstone InstaTour Backend API'
+        termsOfService: 'http://www.example.com/terms-of-service' # 사용자 약관
+        contact:
+          name: 'Juho Moon'
+          url: 'https//soybean.me/'
+          email: 'mwngh3@gmail.com'
+        license:
+          name: 'Licensing'
+          url: 'http://www.example.com/licensing' # 라이센스 설명
+    tags:
+      - name: Tag1
+        description: The first tag
+      - name: Tag2
+        description: That other tag that we all love
+    # authorizers:
+    #   - name: 'MyCustomAuthorizer'
+    #     description: 'This is an error'
+    # resources:
+    #   - path: 'some/path'
+    #     description: 'This is the description for some/path'
+    #   - path: 'some/other/path'
+    #     description: 'This is the description for some/other/path'
+    models:
+      - name: MessageResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      - name: DoSomethingRequest
+        contentType: 'application/json'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: DoSomethingResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            result:
+              type: string
+            submittedItems:
+              type: number
+      - name: 400JsonResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            statusCode:
+              type: number
+      # - name: 'ErrorResponse'
+      #   description: 'This is an error'
+      #   contentType: 'application/json'
+      #   schema: ${file(models/error.json)}
+      # - name: 'CreateRequest'
+      #   description: 'Model for creating something'
+      #   contentType: 'application/json'
+      #   schema: ${file(models/create_request.json)}
+      # - name: 'Address'
+      #   description: 'This is an address'
+      #   contentType: 'application/json'
+      #   schema:
+      #     type: 'object'
+      #     properties:
+      #       street:
+      #         type: 'string'
+      # - name: 'Customer'
+      #   description: 'This is a customer'
+      #   contentType: 'application/json'
+      #   schema:
+      #     type: 'object'
+      #     properties:
+      #       name:
+      #         type: 'string'
+      #       address:
+      #         $ref: '{{model: Address}}'
+
+# you can add packaging information here
+package:
+  individually: true
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
+          documentation:
+            summary: Gets a simple message
+            description: 'Creates the thing you need'
+            tags:
+              - Tag1
+            queryParams:
+              - name: firstParam
+                description: The first param that we want, you MUST pass it
+                required: true
+              - name: secondParam
+                description: The second param. This one is optional
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': MessageResponse
+                responseHeaders:
+                  - name: link
+                    description: describes other actions that can be taken
+                    type: string
+            # requestBody:
+            #   description: 'Request body description'
+            # requestHeaders:
+            #   - name: 'x-header'
+            #     description: 'Header description'
+            #   - name: 'Authorization'
+            #     description: 'Auth Header description'
+            # queryParams:
+            #   - name: 'sid'
+            #     description: 'Session ID'
+            #   - name: 'theme'
+            #     description: 'Theme for for the website'
+            # pathParams:
+            #   - name: 'id'
+            #     description: 'ID of the thing you want to create'
+            # requestModels:
+            #   'application/json': 'CreateRequest'
+            #   'application/xml': 'CreateRequestXml'
+            # methodResponses:
+            #   - statusCode: '200'
+            #     responseBody:
+            #       description: 'Response body description'
+            #     responseHeaders:
+            #       - name: 'x-superheader'
+            #         description: 'this is a super header'
+            #     responseModels:
+            #       'application/json': 'CreateResponse'
+            #   - statusCode: '400'
+            #     responseModels:
+            #       'application/json': 'ErrorResponse'
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - http:
+#          path: users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+resources:
+  - ${file(resources/swagger-bucket.yml)}
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
