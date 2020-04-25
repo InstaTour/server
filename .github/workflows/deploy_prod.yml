@@ -30,7 +30,7 @@ jobs:
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
       - name: Export AWS Documentation
-        run: aws apigateway get-export --rest-api-id ${{ secrets.REST_API_ID }} --stage-name prod --export-type swagger docs.json
+        run: aws apigateway get-export --region ap-northeast-2 --rest-api-id ${{ secrets.REST_API_ID }} --stage-name prod --export-type swagger docs.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
