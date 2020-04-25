@@ -4,6 +4,7 @@
   "description": "this service recommend places based on instagram tags",
   "main": "handler.js",
   "dependencies": {
+    "aws-xray-sdk": "^3.0.0",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "serverless-http": "^2.3.2"
