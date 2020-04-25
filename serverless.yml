@@ -265,6 +265,8 @@ functions:
 #    environment:
 #      variable2: value2
 
+resources:
+  - ${file(resources/swagger-bucket.yml)}
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:

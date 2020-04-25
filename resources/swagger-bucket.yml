@@ -1,0 +1,6 @@
+Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: instatour-${env:STAGE}-swagger-bucket
+      AccessControl: PublicRead
