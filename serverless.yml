@@ -70,6 +70,7 @@ plugins:
   - serverless-apigw-binary
   - serverless-plugin-tracing
   - serverless-plugin-optimize
+  - serverless-domain-manager
   - serverless-offline
 
 custom:
@@ -77,6 +78,12 @@ custom:
     types: #list of mime-types
       - 'image/jpeg'
       - 'text/html'
+  customDomain:
+    domainName: api.instatour.tech
+    stage: ${env:STAGE}
+    basePath: ${env:API_VERSION}
+    certificateName: '*.instatour.tech'
+    createRoute53Record: true
   documentation:
     api:
       info:
