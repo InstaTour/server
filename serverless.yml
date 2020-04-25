@@ -98,10 +98,8 @@ custom:
           name: 'Licensing'
           url: 'http://www.example.com/licensing' # 라이센스 설명
     tags:
-      - name: Tag1
-        description: The first tag
-      - name: Tag2
-        description: That other tag that we all love
+      - name: Test
+        description: 테스트용 API
     # authorizers:
     #   - name: 'MyCustomAuthorizer'
     #     description: 'This is an error'
@@ -113,39 +111,11 @@ custom:
     models:
       - name: MessageResponse
         contentType: 'application/json'
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-      - name: DoSomethingRequest
+        schema: ${file(models/response.json)}
+      - name: ErrorResponse
+        description: 'This is an error'
         contentType: 'application/json'
-        schema:
-          type: array
-          items:
-            type: string
-      - name: DoSomethingResponse
-        contentType: 'application/json'
-        schema:
-          type: object
-          properties:
-            result:
-              type: string
-            submittedItems:
-              type: number
-      - name: 400JsonResponse
-        contentType: 'application/json'
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-            statusCode:
-              type: number
-      # - name: 'ErrorResponse'
-      #   description: 'This is an error'
-      #   contentType: 'application/json'
-      #   schema: ${file(models/error.json)}
+        schema: ${file(models/error.json)}
       # - name: 'CreateRequest'
       #   description: 'Model for creating something'
       #   contentType: 'application/json'
@@ -190,21 +160,11 @@ functions:
             summary: Gets a simple message
             description: 'Creates the thing you need'
             tags:
-              - Tag1
-            queryParams:
-              - name: firstParam
-                description: The first param that we want, you MUST pass it
-                required: true
-              - name: secondParam
-                description: The second param. This one is optional
+              - Test
             methodResponses:
               - statusCode: '200'
                 responseModels:
                   'application/json': MessageResponse
-                responseHeaders:
-                  - name: link
-                    description: describes other actions that can be taken
-                    type: string
             # requestBody:
             #   description: 'Request body description'
             # requestHeaders:
