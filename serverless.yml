@@ -25,7 +25,6 @@ provider:
   runtime: nodejs12.x
   stage: ${env:STAGE}
   region: ap-northeast-2
-  profile: bean4
   tracing: true
   iamRoleStatements:
     - Effect: 'Allow' # xray permissions (required)
