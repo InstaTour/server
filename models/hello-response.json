@@ -1,0 +1,387 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "httpMethod": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "object",
+          "properties": {
+            "Accept": {
+              "type": "string"
+            },
+            "Accept-Encoding": {
+              "type": "string"
+            },
+            "Cache-Control": {
+              "type": "string"
+            },
+            "CloudFront-Forwarded-Proto": {
+              "type": "string"
+            },
+            "CloudFront-Is-Desktop-Viewer": {
+              "type": "string"
+            },
+            "CloudFront-Is-Mobile-Viewer": {
+              "type": "string"
+            },
+            "CloudFront-Is-SmartTV-Viewer": {
+              "type": "string"
+            },
+            "CloudFront-Is-Tablet-Viewer": {
+              "type": "string"
+            },
+            "CloudFront-Viewer-Country": {
+              "type": "string"
+            },
+            "Host": {
+              "type": "string"
+            },
+            "Postman-Token": {
+              "type": "string"
+            },
+            "User-Agent": {
+              "type": "string"
+            },
+            "Via": {
+              "type": "string"
+            },
+            "X-Amz-Cf-Id": {
+              "type": "string"
+            },
+            "X-Amzn-Trace-Id": {
+              "type": "string"
+            },
+            "X-Forwarded-For": {
+              "type": "string"
+            },
+            "X-Forwarded-Port": {
+              "type": "string"
+            },
+            "X-Forwarded-Proto": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Accept",
+            "Accept-Encoding",
+            "Cache-Control",
+            "CloudFront-Forwarded-Proto",
+            "CloudFront-Is-Desktop-Viewer",
+            "CloudFront-Is-Mobile-Viewer",
+            "CloudFront-Is-SmartTV-Viewer",
+            "CloudFront-Is-Tablet-Viewer",
+            "CloudFront-Viewer-Country",
+            "Host",
+            "Postman-Token",
+            "User-Agent",
+            "Via",
+            "X-Amz-Cf-Id",
+            "X-Amzn-Trace-Id",
+            "X-Forwarded-For",
+            "X-Forwarded-Port",
+            "X-Forwarded-Proto"
+          ]
+        },
+        "multiValueHeaders": {
+          "type": "object",
+          "properties": {
+            "Accept": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Accept-Encoding": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Cache-Control": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Forwarded-Proto": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Is-Desktop-Viewer": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Is-Mobile-Viewer": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Is-SmartTV-Viewer": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Is-Tablet-Viewer": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "CloudFront-Viewer-Country": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Host": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Postman-Token": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "User-Agent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Via": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "X-Amz-Cf-Id": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "X-Amzn-Trace-Id": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "X-Forwarded-For": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "X-Forwarded-Port": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "X-Forwarded-Proto": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "Accept",
+            "Accept-Encoding",
+            "Cache-Control",
+            "CloudFront-Forwarded-Proto",
+            "CloudFront-Is-Desktop-Viewer",
+            "CloudFront-Is-Mobile-Viewer",
+            "CloudFront-Is-SmartTV-Viewer",
+            "CloudFront-Is-Tablet-Viewer",
+            "CloudFront-Viewer-Country",
+            "Host",
+            "Postman-Token",
+            "User-Agent",
+            "Via",
+            "X-Amz-Cf-Id",
+            "X-Amzn-Trace-Id",
+            "X-Forwarded-For",
+            "X-Forwarded-Port",
+            "X-Forwarded-Proto"
+          ]
+        },
+        "queryStringParameters": {
+          "type": "null"
+        },
+        "multiValueQueryStringParameters": {
+          "type": "null"
+        },
+        "pathParameters": {
+          "type": "null"
+        },
+        "stageVariables": {
+          "type": "null"
+        },
+        "requestContext": {
+          "type": "object",
+          "properties": {
+            "resourceId": {
+              "type": "string"
+            },
+            "resourcePath": {
+              "type": "string"
+            },
+            "httpMethod": {
+              "type": "string"
+            },
+            "extendedRequestId": {
+              "type": "string"
+            },
+            "requestTime": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "accountId": {
+              "type": "string"
+            },
+            "protocol": {
+              "type": "string"
+            },
+            "stage": {
+              "type": "string"
+            },
+            "domainPrefix": {
+              "type": "string"
+            },
+            "requestTimeEpoch": {
+              "type": "integer"
+            },
+            "requestId": {
+              "type": "string"
+            },
+            "identity": {
+              "type": "object",
+              "properties": {
+                "cognitoIdentityPoolId": {
+                  "type": "null"
+                },
+                "accountId": {
+                  "type": "null"
+                },
+                "cognitoIdentityId": {
+                  "type": "null"
+                },
+                "caller": {
+                  "type": "null"
+                },
+                "sourceIp": {
+                  "type": "string"
+                },
+                "principalOrgId": {
+                  "type": "null"
+                },
+                "accessKey": {
+                  "type": "null"
+                },
+                "cognitoAuthenticationType": {
+                  "type": "null"
+                },
+                "cognitoAuthenticationProvider": {
+                  "type": "null"
+                },
+                "userArn": {
+                  "type": "null"
+                },
+                "userAgent": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "cognitoIdentityPoolId",
+                "accountId",
+                "cognitoIdentityId",
+                "caller",
+                "sourceIp",
+                "principalOrgId",
+                "accessKey",
+                "cognitoAuthenticationType",
+                "cognitoAuthenticationProvider",
+                "userArn",
+                "userAgent",
+                "user"
+              ]
+            },
+            "domainName": {
+              "type": "string"
+            },
+            "apiId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "resourceId",
+            "resourcePath",
+            "httpMethod",
+            "extendedRequestId",
+            "requestTime",
+            "path",
+            "accountId",
+            "protocol",
+            "stage",
+            "domainPrefix",
+            "requestTimeEpoch",
+            "requestId",
+            "identity",
+            "domainName",
+            "apiId"
+          ]
+        },
+        "body": {
+          "type": "null"
+        },
+        "isBase64Encoded": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "resource",
+        "path",
+        "httpMethod",
+        "headers",
+        "multiValueHeaders",
+        "queryStringParameters",
+        "multiValueQueryStringParameters",
+        "pathParameters",
+        "stageVariables",
+        "requestContext",
+        "body",
+        "isBase64Encoded"
+      ]
+    }
+  },
+  "required": ["message", "input"]
+}
