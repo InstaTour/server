@@ -72,6 +72,91 @@ custom:
     types: #list of mime-types
       - 'image/jpeg'
       - 'text/html'
+  documentation:
+    api:
+      info:
+        version: '2' # see note above about this being ignored
+        title: 'InstaTour API' # see note above about this being ignored
+        description: 'Inha Univ. Capstone InstaTour Backend API'
+        termsOfService: 'http://www.example.com/terms-of-service' # 사용자 약관
+        contact:
+          name: 'Juho Moon'
+          url: 'https//soybean.me/'
+          email: 'mwngh3@gmail.com'
+        license:
+          name: 'Licensing'
+          url: 'http://www.example.com/licensing' # 라이센스 설명
+    tags:
+      - name: Tag1
+        description: The first tag
+      - name: Tag2
+        description: That other tag that we all love
+    # authorizers:
+    #   - name: 'MyCustomAuthorizer'
+    #     description: 'This is an error'
+    # resources:
+    #   - path: 'some/path'
+    #     description: 'This is the description for some/path'
+    #   - path: 'some/other/path'
+    #     description: 'This is the description for some/other/path'
+    models:
+      - name: MessageResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      - name: DoSomethingRequest
+        contentType: 'application/json'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: DoSomethingResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            result:
+              type: string
+            submittedItems:
+              type: number
+      - name: 400JsonResponse
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            statusCode:
+              type: number
+      # - name: 'ErrorResponse'
+      #   description: 'This is an error'
+      #   contentType: 'application/json'
+      #   schema: ${file(models/error.json)}
+      # - name: 'CreateRequest'
+      #   description: 'Model for creating something'
+      #   contentType: 'application/json'
+      #   schema: ${file(models/create_request.json)}
+      # - name: 'Address'
+      #   description: 'This is an address'
+      #   contentType: 'application/json'
+      #   schema:
+      #     type: 'object'
+      #     properties:
+      #       street:
+      #         type: 'string'
+      # - name: 'Customer'
+      #   description: 'This is a customer'
+      #   contentType: 'application/json'
+      #   schema:
+      #     type: 'object'
+      #     properties:
+      #       name:
+      #         type: 'string'
+      #       address:
+      #         $ref: '{{model: Address}}'
 
 # you can add packaging information here
 package:
@@ -90,6 +175,55 @@ functions:
       - http:
           path: /hello
           method: get
+          documentation:
+            summary: Gets a simple message
+            description: 'Creates the thing you need'
+            tags:
+              - Tag1
+            queryParams:
+              - name: firstParam
+                description: The first param that we want, you MUST pass it
+                required: true
+              - name: secondParam
+                description: The second param. This one is optional
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': MessageResponse
+                responseHeaders:
+                  - name: link
+                    description: describes other actions that can be taken
+                    type: string
+            # requestBody:
+            #   description: 'Request body description'
+            # requestHeaders:
+            #   - name: 'x-header'
+            #     description: 'Header description'
+            #   - name: 'Authorization'
+            #     description: 'Auth Header description'
+            # queryParams:
+            #   - name: 'sid'
+            #     description: 'Session ID'
+            #   - name: 'theme'
+            #     description: 'Theme for for the website'
+            # pathParams:
+            #   - name: 'id'
+            #     description: 'ID of the thing you want to create'
+            # requestModels:
+            #   'application/json': 'CreateRequest'
+            #   'application/xml': 'CreateRequestXml'
+            # methodResponses:
+            #   - statusCode: '200'
+            #     responseBody:
+            #       description: 'Response body description'
+            #     responseHeaders:
+            #       - name: 'x-superheader'
+            #         description: 'this is a super header'
+            #     responseModels:
+            #       'application/json': 'CreateResponse'
+            #   - statusCode: '400'
+            #     responseModels:
+            #       'application/json': 'ErrorResponse'
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
