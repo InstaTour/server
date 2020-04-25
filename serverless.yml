@@ -156,6 +156,7 @@ functions:
       - http:
           path: /hello
           method: get
+          cors: true
           documentation:
             summary: Gets a simple message
             description: 'Creates the thing you need'
