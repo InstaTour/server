@@ -22,6 +22,7 @@ jobs:
         run: |
           echo SLS_DEBUG=* >> .env
           echo STAGE=prod >> .env
+          
       - name: serverless deploy
         uses: serverless/github-action@master
         with:
