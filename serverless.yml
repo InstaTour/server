@@ -24,6 +24,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: ap-northeast-2
+  profile: bean4
   tracing: true
   iamRoleStatements:
     - Effect: 'Allow' # xray permissions (required)
@@ -55,9 +56,10 @@ provider:
 
 plugins:
   - serverless-aws-documentation
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
   - serverless-apigw-binary
   - serverless-plugin-tracing
-  - serverless-plugin-typescript
   - serverless-plugin-optimize
   - serverless-offline
 
@@ -84,6 +86,10 @@ package:
 functions:
   hello:
     handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
