@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - master
+name: Deploy master branch
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - run: npm install
+      - name: save .env
+        run: |
+          echo SLS_DEBUG=* >> .env
+          echo STAGE=prod >> .env
+      - name: serverless deploy
+        uses: serverless/github-action@master
+        with:
+          args: deploy
