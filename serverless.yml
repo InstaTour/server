@@ -34,6 +34,9 @@ provider:
         - 'xray:PutTelemetryRecords'
       Resource:
         - '*'
+  deploymentBucket:
+    name: instatour-${env:STAGE}-serverlessdeploymentbucket
+    serverSideEncryption: AES256
 
 # you can overwrite defaults here
 #  stage: dev
@@ -60,6 +63,7 @@ provider:
 #    variable1: value1
 
 plugins:
+  - serverless-deployment-bucket
   - serverless-aws-documentation
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
