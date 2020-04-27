@@ -238,6 +238,7 @@ functions:
 
 resources:
   - ${file(resources/swagger-bucket.yml)}
+  - ${file(resources/s3-bucket.yml)}
   - ${file(resources/cognito-user-pool.yml)}
   - ${file(resources/cognito-identity-pool.yml)}
 # you can add CloudFormation resource templates here
