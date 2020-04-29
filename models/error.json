@@ -1,6 +1,9 @@
 {
   "type": "object",
   "properties": {
+    "data": {
+      "type": "null"
+    },
     "message": {
       "type": "string"
     }
