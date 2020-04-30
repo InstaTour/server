@@ -100,6 +100,8 @@ custom:
     tags:
       - name: Test
         description: 테스트용 API
+      - name: Post
+        description: 게시물 관련 API
     # authorizers:
     #   - name: 'MyCustomAuthorizer'
     #     description: 'This is an error'
@@ -112,6 +114,9 @@ custom:
       - name: HelloResponse
         contentType: 'application/json'
         schema: ${file(models/hello-response.json)}
+      - name: GetPostsResponse
+        contentType: 'application/json'
+        schema: ${file(models/get-post-response.json)}
       - name: ErrorResponse
         description: 'This is an error'
         contentType: 'application/json'
@@ -196,6 +201,23 @@ functions:
             #   - statusCode: '400'
             #     responseModels:
             #       'application/json': 'ErrorResponse'
+  posts:
+    handler: src/posts.handler
+    events:
+      - http:
+          path: /posts
+          method: get
+          cors: true
+          documentation:
+            summary: Get Posts Image Array
+            description: '테스트용 5개의 이미지를 받아온다.'
+            tags:
+              - Test
+              - Post
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': GetPostsResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
