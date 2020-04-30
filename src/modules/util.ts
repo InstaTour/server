@@ -14,7 +14,7 @@ export function isUndefined(obj: Object) {
 export function createResponse(
   ctx: ParameterizedContext,
   status: statusCode,
-  body: Object,
+  body: Object | null,
   err: String | null = null
 ) {
   ctx.status = status;
