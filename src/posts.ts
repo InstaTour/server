@@ -35,10 +35,10 @@ router.get('/', async (ctx) => {
   console.log(ctx.request.url, ctx.request.method);
 
   const posts = [
-    'http://s3.instatour.tech/image+(56).png',
-    'http://s3.instatour.tech/image+(57).png',
-    'http://s3.instatour.tech/image+(58).png',
-    'http://s3.instatour.tech/image+(59).png',
+    'http://s3.instatour.tech/image56.png',
+    'http://s3.instatour.tech/image57.png',
+    'http://s3.instatour.tech/image58.png',
+    'http://s3.instatour.tech/image59.png',
   ];
 
   createResponse(ctx, statusCode.success, { posts });
