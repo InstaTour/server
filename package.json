@@ -8,6 +8,7 @@
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-router": "^8.0.8",
+    "neo4j-driver": "^4.0.2",
     "serverless-http": "^2.3.2"
   },
   "devDependencies": {
