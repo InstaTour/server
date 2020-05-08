@@ -73,6 +73,10 @@ plugins:
   - serverless-offline
 
 custom:
+  myAuthorizer:
+    type: COGNITO_USER_POOLS
+    authorizerId:
+      Ref: ApiGatewayAuthorizer
   apigwBinary:
     types: #list of mime-types
       - 'image/jpeg'
@@ -208,6 +212,7 @@ functions:
           path: /posts
           method: get
           cors: true
+          authorizer: ${self:custom.myAuthorizer}
           documentation:
             summary: Get Posts Image Array
             description: '테스트용 5개의 이미지를 받아온다.'
