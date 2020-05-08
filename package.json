@@ -7,12 +7,14 @@
     "aws-xray-sdk": "^3.0.0",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-router": "^8.0.8",
     "neo4j-driver": "^4.0.2",
     "serverless-http": "^2.3.2"
   },
   "devDependencies": {
     "@types/koa": "^2.11.3",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-aws-documentation": "^1.1.0",
