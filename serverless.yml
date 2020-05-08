@@ -205,6 +205,13 @@ functions:
             #   - statusCode: '400'
             #     responseModels:
             #       'application/json': 'ErrorResponse'
+  # Cognito Trigger
+  preSignUp:
+    handler: src/authorizer/preSingUp.handler
+    events:
+      - cognitoUserPool:
+        pool: CognitoUserPool
+        trigger: PreSignUp
   posts:
     handler: src/posts.handler
     events:
