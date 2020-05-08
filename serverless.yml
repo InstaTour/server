@@ -212,6 +212,14 @@ functions:
       - cognitoUserPool:
         pool: CognitoUserPool
         trigger: PreSignUp
+  # 로그인
+  auth:
+    handler: src/auth.handler
+    events:
+      - http:
+          path: /auth
+          method: post
+          cors: true
   posts:
     handler: src/posts.handler
     events:
