@@ -106,21 +106,31 @@ custom:
         description: 테스트용 API
       - name: Post
         description: 게시물 관련 API
-    # authorizers:
-    #   - name: 'MyCustomAuthorizer'
-    #     description: 'This is an error'
+      - name: Auth
+        description: Cognito 관련 API
+    authorizers:
+      - name: MyCognitoAuthorizer
+        description: 'AWS Cognito의 인증 토큰'
     # resources:
     #   - path: 'some/path'
     #     description: 'This is the description for some/path'
     #   - path: 'some/other/path'
     #     description: 'This is the description for some/other/path'
     models:
+      # Request
+      - name: PostAuthRequest
+        contentType: 'application/json'
+        schema: ${file(models/post-auth-request.json)}
+      # Response
       - name: HelloResponse
         contentType: 'application/json'
         schema: ${file(models/hello-response.json)}
       - name: GetPostsResponse
         contentType: 'application/json'
         schema: ${file(models/get-post-response.json)}
+      - name: PostAuthResponse
+        contentType: 'application/json'
+        schema: ${file(models/post-auth-response.json)}
       - name: ErrorResponse
         description: 'This is an error'
         contentType: 'application/json'
@@ -159,6 +169,7 @@ package:
 #    - exclude-me-dir/**
 
 functions:
+  # 기본 테스트
   hello:
     handler: handler.hello
     events:
@@ -167,8 +178,8 @@ functions:
           method: get
           cors: true
           documentation:
-            summary: Gets a simple message
-            description: 'Creates the thing you need'
+            summary: '테스트용 기본 메세지'
+            description: 'AWS Lambda의 기본 Response'
             tags:
               - Test
             methodResponses:
@@ -220,6 +231,22 @@ functions:
           path: /auth
           method: post
           cors: true
+          documentation:
+            summary: 'Cognito 로그인'
+            description: 'Cognito 회원풀에 로그인하고 그 결과로 토큰을 반환'
+            tags:
+              - Auth
+            requestBody:
+              description: >
+                username: 로그인할 유저 아이디
+                password: 로그인할 유저 비밀번호
+            requestModels:
+              'application/json': PostAuthRequest
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': PostAuthResponse
+  # Post
   posts:
     handler: src/posts.handler
     events:
@@ -227,9 +254,9 @@ functions:
           path: /posts
           method: get
           cors: true
-          authorizer: ${self:custom.myAuthorizer}
+          # authorizer: ${self:custom.myAuthorizer}
           documentation:
-            summary: Get Posts Image Array
+            summary: 테스트용 이미지 받기
             description: '테스트용 5개의 이미지를 받아온다.'
             tags:
               - Test
