@@ -23,6 +23,12 @@ jobs:
           echo SLS_DEBUG=* >> .env
           echo STAGE=prod >> .env
           echo API_VERSION=v1 >> .env
+          echo NEO4J_URL=${{ secrets.NEO4J_URL }} >> .env
+          echo NEO4J_ID=${{ secrets.NEO4J_ID }} >> .env
+          echo NEO4J_PW=${{ secrets.NEO4J_PW }} >> .env
+          echo COGNITO_URL=${{ secrets.COGNITO_URL }} >> .env
+          echo COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }} >> .env
+          echo COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }} >> .env
       - name: serverless deploy
         uses: serverless/github-action@master
         with:

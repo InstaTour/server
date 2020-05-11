@@ -4,29 +4,33 @@
   "description": "this service recommend places based on instagram tags",
   "main": "handler.js",
   "dependencies": {
+    "amazon-cognito-identity-js": "^4.2.3",
     "aws-xray-sdk": "^3.0.0",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-router": "^8.0.8",
     "neo4j-driver": "^4.0.2",
     "serverless-http": "^2.3.2"
   },
   "devDependencies": {
     "@types/koa": "^2.11.3",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-deployment-bucket": "^1.1.2",
     "serverless-domain-manager": "^3.3.2",
     "serverless-dotenv-plugin": "^2.4.2",
-    "serverless-offline": "^6.1.4",
+    "serverless-offline": "^6.1.5",
     "serverless-plugin-optimize": "^4.1.4-rc.1",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "offline": "serverless offline --skipCacheInvalidation start"
   },
   "repository": {
     "type": "git",
