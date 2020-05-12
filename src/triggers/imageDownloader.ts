@@ -54,17 +54,21 @@ async function imageToS3(url: string, filename: string) {
     return pass;
   };
 
-  const imageRequest = axios({
+  const imageRequest = await axios({
     method: 'get',
     url: url,
     responseType: 'stream',
-  }).then((response) => {
-    console.log('STREAM.then', response);
-    if (response.status === 200) {
-      contentType = response.headers['content-type'];
-      response.data.pipe(uploadStream());
-    }
   });
+
+  if (imageRequest) {
+    console.log('STREAM.then', imageRequest);
+    if (imageRequest.status === 200) {
+      contentType = imageRequest.headers['content-type'];
+      imageRequest.data.pipe(uploadStream());
+    }
+  }
+
+  return promise;
 }
 
 exports.handler = async (event: any, context: Context, callback: Callback) => {
@@ -81,6 +85,8 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
     const key = obj.key;
 
     if (record.eventName == 'INSERT' || record.eventName == 'MODIFY') {
+      console.log('[DOWNLOAD START]');
+
       // 이미지 주소 분리
       const img_url = obj.img_url;
 
