@@ -29,6 +29,8 @@ jobs:
           echo COGNITO_URL=${{ secrets.COGNITO_URL }} >> .env
           echo COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }} >> .env
           echo COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }} >> .env
+          echo S3_BUCKET=${{ secrets.S3_BUCKET }} >> .env
+          echo S3_URL=${{ secrets.S3_URL }} >> .env
       - name: serverless deploy
         uses: serverless/github-action@master
         with:
