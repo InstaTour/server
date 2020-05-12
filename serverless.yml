@@ -218,10 +218,10 @@ functions:
             #       'application/json': 'ErrorResponse'
   # Cognito Trigger
   preSignUp:
-    handler: src/authorizer/preSingUp.handler
+    handler: src/authorizer/preSignUp.handler
     events:
       - cognitoUserPool:
-        pool: CognitoUserPool
+        pool: ${env:STAGE}-user-pool
         trigger: PreSignUp
   # 로그인
   auth:
