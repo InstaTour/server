@@ -33,6 +33,13 @@ provider:
         - 'xray:PutTelemetryRecords'
       Resource:
         - '*'
+    # for S3
+    - Effect: 'Allow'
+      Action:
+        - 's3:*'
+      Resource:
+        - 'arn:aws:s3:::instatour-image'
+        - 'arn:aws:s3:::instatour-image/*'
   deploymentBucket:
     name: instatour-${env:STAGE}-serverlessdeploymentbucket
     serverSideEncryption: AES256
@@ -230,6 +237,11 @@ functions:
   # DynamoDB Trigger
   PostDBUpdate:
     handler: src/triggers/postDBUpdate.handler
+    timeout: 900
+    events:
+      - stream: ${self:custom.dynamodbStream.${env:STAGE}}
+  imageDownloader:
+    handler: src/triggers/imageDownloader.handler
     timeout: 900
     events:
       - stream: ${self:custom.dynamodbStream.${env:STAGE}}
