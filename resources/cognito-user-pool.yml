@@ -4,6 +4,21 @@ Resources:
     Properties:
       # Generate a name based on the stage
       UserPoolName: ${env:STAGE}-user-pool
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: nickname
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: email
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: profile
+          AttributeDataType: String
+          Mutable: true
+          Required: true
       Policies:
         PasswordPolicy:
           MinimumLength: 8
