@@ -53,7 +53,7 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
     let params: Object[] = [];
 
     // 이미지 S3로 연결
-    img.img_url = process.env.S3_URL + key + '.jpg';
+    img.img_url = `${process.env.S3_URL}/${process.env.STAGE}/${key}.jpg`;
 
     // 새로 추가시
     if (record.eventName == 'INSERT') {
@@ -84,8 +84,5 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
   }
 
   console.log(`Before callback ${event.Records.length} records.`);
-  return callback(
-    null,
-    `Successfully processed ${event.Records.length} records.`
-  );
+  callback(null, `Successfully processed ${event.Records.length} records.`);
 };

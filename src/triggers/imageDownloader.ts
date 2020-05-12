@@ -100,8 +100,5 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
   }
 
   console.log(`Before callback ${event.Records.length} records.`);
-  return callback(
-    null,
-    `Successfully processed ${event.Records.length} records.`
-  );
+  callback(null, `Successfully processed ${event.Records.length} records.`);
 };
