@@ -268,6 +268,14 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': PostAuthResponse
+  # Search
+  search:
+    handler: src/search.handler
+    events:
+      - http:
+          path: /search
+          method: get
+          cors: true
   # Post
   posts:
     handler: src/posts.handler

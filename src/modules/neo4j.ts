@@ -2,7 +2,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import neo4j, { QueryResult } from 'neo4j-driver';
+import neo4j, { QueryResult, Node, DateTime } from 'neo4j-driver';
 import { Parameters } from 'neo4j-driver/types/query-runner';
 
 const driver = neo4j.driver(
@@ -20,6 +20,7 @@ export const enum Query {
   update_user = 'MATCH (p:User {id: $id}) CALL apoc.create.setProperties(p, $keys, $values) YIELD node RETURN node',
   update_post = 'MATCH (p:Post {id: $id}) CALL apoc.create.setProperties(p, $keys, $values) YIELD node RETURN node',
   post_hashtag_relation = 'MERGE (p:Post {id: $pid}) MERGE (t:HashTag {id: $tid}) MERGE (p)-[:TAGGED]->(t)',
+  get_posts_with_hashtag = 'MATCH (post:Post)-[:TAGGED]->(hashtag:HashTag {id: $id}) RETURN hashtag, post LIMIT $limit',
 }
 
 export async function tx(querys: Query[], params: Parameters[]) {
@@ -41,4 +42,14 @@ export async function tx(querys: Query[], params: Parameters[]) {
   } finally {
     await session.close();
   }
+}
+
+export interface Post extends Node {
+  properties: {
+    date: DateTime;
+    id: string;
+    img_url: string;
+    content: string;
+    likes: Number;
+  };
 }
