@@ -115,7 +115,7 @@ custom:
     tags:
       - name: Test
         description: 테스트용 API
-      - name: Post
+      - name: Posts
         description: 게시물 관련 API
       - name: Auth
         description: Cognito 관련 API
@@ -131,17 +131,21 @@ custom:
       # Request
       - name: PostAuthRequest
         contentType: 'application/json'
-        schema: ${file(models/post-auth-request.json)}
+        schema: ${file(models/request/auth/post.json)}
       # Response
-      - name: HelloResponse
+      # Test
+      - name: HelloGetResponse
         contentType: 'application/json'
-        schema: ${file(models/hello-response.json)}
-      - name: GetPostsResponse
+        schema: ${file(models/response/hello/get.json)}
+        # Auth
+      - name: AuthPostResponse
         contentType: 'application/json'
-        schema: ${file(models/get-post-response.json)}
-      - name: PostAuthResponse
+        schema: ${file(models/response/auth/post.json)}
+        # Posts
+      - name: PostsGetResponse
         contentType: 'application/json'
-        schema: ${file(models/post-auth-response.json)}
+        schema: ${file(models/response/posts/get.json)}
+        # Error
       - name: ErrorResponse
         description: 'This is an error'
         contentType: 'application/json'
@@ -196,7 +200,7 @@ functions:
             methodResponses:
               - statusCode: '200'
                 responseModels:
-                  'application/json': HelloResponse
+                  'application/json': HelloGetResponse
             # requestBody:
             #   description: 'Request body description'
             # requestHeaders:
@@ -263,11 +267,11 @@ functions:
                 username: 로그인할 유저 아이디
                 password: 로그인할 유저 비밀번호
             requestModels:
-              'application/json': PostAuthRequest
+              'application/json': AuthPostRequest
             methodResponses:
               - statusCode: '200'
                 responseModels:
-                  'application/json': PostAuthResponse
+                  'application/json': AuthPostResponse
   # Post
   posts:
     handler: src/posts.handler
@@ -282,11 +286,11 @@ functions:
             description: '테스트용 5개의 이미지를 받아온다.'
             tags:
               - Test
-              - Post
+              - Posts
             methodResponses:
               - statusCode: '200'
                 responseModels:
-                  'application/json': GetPostsResponse
+                  'application/json': PostsGetResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
