@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "offline": "serverless offline --skipCacheInvalidation start"
+    "offline": "sls offline start --disableCookieValidation --useChildProcesses"
   },
   "repository": {
     "type": "git",
