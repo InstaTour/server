@@ -25,8 +25,16 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 
 // Neo4j 연결
-import { tx, Query, Post } from './modules/neo4j';
-import { int, Node } from 'neo4j-driver';
+import {
+  tx,
+  Query,
+  Post,
+  PostNode,
+  toNumber,
+  Integer,
+  Sections,
+  int,
+} from './modules/neo4j';
 
 /**
  * Route: /search
