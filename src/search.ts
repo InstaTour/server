@@ -39,14 +39,21 @@ router.get('/', async (ctx) => {
   console.log(ctx.request.url, ctx.request.method);
 
   // 파라미터 가져오기
-  const id = ctx.request.query.id;
-  const limit = int(5);
+  const location = ctx.request.query.location;
+  const section = ctx.request.query.location || 'ALL';
+  const limit = int(ctx.request.query.limit || 5);
+  const skip = int(ctx.request.query.skip || 0);
+  console.log({ location, section, limit, skip });
 
   // 쿼리 보내기
-  const results = await tx([Query.get_posts_with_hashtag], [{ id, limit }]);
+  const results = await tx(
+    [Query.get_posts_with_hashtag],
+    [{ id: location, section, limit, skip }]
+  );
 
   // 서버에서 값이 안넘어올시 에러
   if (!results) {
+    console.error('Database Result is null');
     return createResponse(
       ctx,
       statusCode.dataBaseError,
@@ -54,20 +61,42 @@ router.get('/', async (ctx) => {
       'Database Result is null'
     );
   }
+  const result = results[0];
 
   // 결과 파싱하여 넣기
-  let posts: any[] = [];
-  for (const result of results) {
-    result.records.forEach((r) => {
-      console.log(r);
+  let res = {
+    posts: [] as Post[],
+    num: 0 as number,
+  };
+  result.records.forEach((r) => {
+    console.log(r);
 
-      const post: Post = r.get('post');
-      posts.push(post.properties);
-    });
-  }
+    // 게시글 결과 가져오기
+    const postsNodes: PostNode[] = r.get('posts');
+    if (postsNodes) {
+      postsNodes.forEach((node) => {
+        res.posts.push(node.properties);
+      });
+    }
+
+    // 전체 게시물 개수 가져와서 JS 숫자로 변환
+    const numValue: Integer = r.get('num');
+    const num = toNumber(numValue);
+
+    // 숫자가 JS로 표현이 불가능하면 에러
+    if (num == null) {
+      console.error('Result number is Invalid');
+      return createResponse(
+        ctx,
+        statusCode.dataBaseError,
+        null,
+        'Result number is Invalid'
+      );
+    } else res.num = num;
+  });
 
   // 결과값 반환
-  createResponse(ctx, statusCode.success, { posts });
+  createResponse(ctx, statusCode.success, res);
 });
 
 // Lambda로 내보내기
