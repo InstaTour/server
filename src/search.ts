@@ -25,16 +25,15 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 
 // Neo4j 연결
+import { tx, Query, toNumber, int, isSections } from './modules/neo4j';
 import {
-  tx,
-  Query,
   Post,
-  PostNode,
-  toNumber,
   Integer,
   Sections,
-  int,
-} from './modules/neo4j';
+  HeartedRelationship,
+  RatedRelationship,
+} from './modules/neo4j/types';
+import { getUserInfo } from './modules/cognito';
 
 /**
  * Route: /search
@@ -48,16 +47,32 @@ router.get('/', async (ctx) => {
 
   // 파라미터 가져오기
   const location = ctx.request.query.location;
-  const section = ctx.request.query.location || 'ALL';
+  const section: Sections = isSections(ctx.request.query.section)
+    ? ctx.request.query.section
+    : 'ALL';
   const limit = int(ctx.request.query.limit || 5);
   const skip = int(ctx.request.query.skip || 0);
   console.log({ location, section, limit, skip });
 
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 파라미터 오류 체크
+  if (!location) {
+    console.error('Query (location) is undefined');
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'Query (location) is undefined'
+    );
+  }
   // 쿼리 보내기
   const results = await tx(
-    [Query.get_posts_with_hashtag],
-    [{ id: location, section, limit, skip }]
+    [Query.search_with_hashtag],
+    [{ hid: location, uid: user.username, section, limit, skip }]
   );
+  console.log('results', results);
 
   // 서버에서 값이 안넘어올시 에러
   if (!results) {
@@ -80,15 +95,26 @@ router.get('/', async (ctx) => {
     console.log(r);
 
     // 게시글 결과 가져오기
-    const postsNodes: PostNode[] = r.get('posts');
+    const postsNodes: Post[] = r.get('posts');
+    console.log('postsNodes', postsNodes);
     if (postsNodes) {
       postsNodes.forEach((node) => {
-        res.posts.push(node.properties);
+        if (node.hearted) {
+          node.hearted = (node.hearted as HeartedRelationship).properties;
+          node.hearted.created_at = node.hearted.created_at.toString();
+        }
+        if (node.rated) {
+          node.rated = (node.rated as RatedRelationship).properties;
+          node.rated.updated_at = node.rated.updated_at.toString();
+        }
+
+        res.posts.push(node);
       });
     }
 
     // 전체 게시물 개수 가져와서 JS 숫자로 변환
     const numValue: Integer = r.get('num');
+    console.log('numValue', numValue);
     const num = toNumber(numValue);
 
     // 숫자가 JS로 표현이 불가능하면 에러
