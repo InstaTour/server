@@ -49,11 +49,21 @@ router.post('/', bodyParser(), async (ctx) => {
   const username = ctx.request.body.username;
   const password = ctx.request.body.password;
 
-  if (isUndefined(username)) {
-    createResponse(ctx, statusCode.requestError, null, 'username이 없습니다.');
+  if (!username) {
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'username이 없습니다.'
+    );
   }
-  if (isUndefined(password)) {
-    createResponse(ctx, statusCode.requestError, null, 'password가 없습니다.');
+  if (!password) {
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'password가 없습니다.'
+    );
   }
 
   const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
