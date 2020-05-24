@@ -286,13 +286,22 @@ functions:
           path: /search
           method: get
           cors: true
+          authorizer: ${self:custom.myAuthorizer}
           documentation:
             summary: '해시태그로 검색'
             description: '해시태그로 검색하여 그 결과를 반환한다'
             tags:
               - Search
             queryParams:
-
+              - name: 'location'
+                description: '검색할 장소(해시태그)'
+                required: true
+              - name: 'section'
+                description: '장소를 구분짓는 그룹 (default: ALL)'
+              - name: 'skip'
+                description: '게시글 결과를 앞에서 부터 생략할 갯수 (default: 0)'
+              - name: 'limit'
+                description: '게시글 결과를 받아올 갯수 (default: 5)'
             methodResponses:
               - statusCode: '200'
                 responseModels:

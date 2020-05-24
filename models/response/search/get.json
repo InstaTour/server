@@ -7,8 +7,47 @@
         "posts": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "rated": {
+                "type": "object",
+                "properties": {
+                  "updated_at": {
+                    "type": "string"
+                  },
+                  "rates": {
+                    "type": "number"
+                  }
+                }
+              },
+              "hearted": {
+                "type": "object",
+                "properties": {
+                  "created_at": {
+                    "type": "string"
+                  }
+                }
+              },
+              "img_url": {
+                "type": "string"
+              },
+              "likes": {
+                "type": "integer"
+              },
+              "id": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            }
           }
+        },
+        "num": {
+          "type": "integer"
         }
       }
     },
