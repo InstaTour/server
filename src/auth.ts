@@ -24,17 +24,10 @@ import { captureAWS } from 'aws-xray-sdk';
 const awsSdk = captureAWS(rawAWS);
 
 // util 가져오기
-import { createResponse, statusCode, isUndefined } from './modules/util';
+import { createResponse, statusCode } from './modules/util';
+import { AuthenticationDetails, getUser } from './modules/cognito';
 
 // Cognito
-import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
-
-const poolData = {
-  UserPoolId: process.env.COGNITO_USER_POOL_ID as string,
-  ClientId: process.env.COGNITO_CLIENT_ID as string,
-};
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
 /**
  * Route: /auth
  * Method: post
@@ -49,25 +42,29 @@ router.post('/', bodyParser(), async (ctx) => {
   const username = ctx.request.body.username;
   const password = ctx.request.body.password;
 
-  if (isUndefined(username)) {
-    createResponse(ctx, statusCode.requestError, null, 'username이 없습니다.');
+  if (!username) {
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'username이 없습니다.'
+    );
   }
-  if (isUndefined(password)) {
-    createResponse(ctx, statusCode.requestError, null, 'password가 없습니다.');
+  if (!password) {
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'password가 없습니다.'
+    );
   }
 
-  const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
-    {
-      Username: username,
-      Password: password,
-    }
-  );
-  const userData = {
+  const authenticationDetails = new AuthenticationDetails({
     Username: username,
-    Pool: userPool,
-  };
+    Password: password,
+  });
 
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  const cognitoUser = getUser(username);
 
   const result: any = await new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
@@ -76,10 +73,9 @@ router.post('/', bodyParser(), async (ctx) => {
       newPasswordRequired: resolve,
     });
   });
+  console.log('result', result);
 
   const idToken = result.idToken.jwtToken;
-
-  console.log(result.idToken);
 
   createResponse(ctx, statusCode.success, { idToken });
 });

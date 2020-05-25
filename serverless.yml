@@ -119,6 +119,8 @@ custom:
         description: 게시물 관련 API
       - name: Auth
         description: Cognito 관련 API
+      - name: Search
+        description: 검색 관련 API
     authorizers:
       - name: MyCognitoAuthorizer
         description: 'AWS Cognito의 인증 토큰'
@@ -129,7 +131,7 @@ custom:
     #     description: 'This is the description for some/other/path'
     models:
       # Request
-      - name: PostAuthRequest
+      - name: AuthPostRequest
         contentType: 'application/json'
         schema: ${file(models/request/auth/post.json)}
       # Response
@@ -145,6 +147,10 @@ custom:
       - name: PostsGetResponse
         contentType: 'application/json'
         schema: ${file(models/response/posts/get.json)}
+        # Search
+      - name: SearchGetResponse
+        contentType: 'application/json'
+        schema: ${file(models/response/search/get.json)}
         # Error
       - name: ErrorResponse
         description: 'This is an error'
@@ -272,6 +278,34 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': AuthPostResponse
+  # Search
+  search:
+    handler: src/search.handler
+    events:
+      - http:
+          path: /search
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: '해시태그로 검색'
+            description: '해시태그로 검색하여 그 결과를 반환한다'
+            tags:
+              - Search
+            queryParams:
+              - name: 'location'
+                description: '검색할 장소(해시태그)'
+                required: true
+              - name: 'section'
+                description: '장소를 구분짓는 그룹 (default: ALL)'
+              - name: 'skip'
+                description: '게시글 결과를 앞에서 부터 생략할 갯수 (default: 0)'
+              - name: 'limit'
+                description: '게시글 결과를 받아올 갯수 (default: 5)'
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': SearchGetResponse
   # Post
   posts:
     handler: src/posts.handler
@@ -336,6 +370,7 @@ resources:
   - ${file(resources/s3-bucket.yml)}
   - ${file(resources/cognito-user-pool.yml)}
   - ${file(resources/cognito-identity-pool.yml)}
+  - ${file(resources/api-gateway.yml)}
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:

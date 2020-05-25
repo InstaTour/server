@@ -4,13 +4,6 @@ dotenv.config();
 
 import { ParameterizedContext } from 'koa';
 
-export function isUndefined(obj: Object) {
-  if (typeof obj === 'undefined' && !obj) {
-    return true;
-  }
-  return false;
-}
-
 export function createResponse(
   ctx: ParameterizedContext,
   status: statusCode,
