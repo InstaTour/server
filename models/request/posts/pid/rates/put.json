@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "rates": {
+      "type": "number"
+    }
+  },
+  "required": ["rates"]
+}

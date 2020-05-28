@@ -139,6 +139,11 @@ custom:
       - name: PostsPostRequest
         contentType: 'application/json'
         schema: ${file(models/request/posts/post.json)}
+        # Posts/{pid}
+      - name: PostsPidRatesPutRequest
+        contentType: 'application/json'
+        schema: ${file(models/request/posts/pid/rates/put.json)}
+
       # Response
       # Test
       - name: HelloGetResponse
@@ -411,6 +416,20 @@ functions:
           method: put
           cors: true
           authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글에 별점주기
+            description: '게시글에 별점을 준다.'
+            tags:
+              - Posts
+            requestBody:
+              description: >
+                *rates: 게시글에 부여할 별점 (범위 제한 없음)
+            requestModels:
+              'application/json': PostsPidRatesPutRequest
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
