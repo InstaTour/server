@@ -79,6 +79,35 @@ router.get('/', async (ctx) => {
   createResponse(ctx, statusCode.success, res);
 });
 
+/* 유저 삭제 */
+router.delete('/', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx([Query.delete_user], [{ uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.processingSuccess, null);
+});
+
 // Lambda로 내보내기
 module.exports.handler = serverless(app, {
   basePath: process.env.API_VERSION,
