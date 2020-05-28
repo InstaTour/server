@@ -500,6 +500,15 @@ functions:
               - statusCode: '204'
                 responseModels:
                   'application/json': ProcessingSuccessResponse
+  # Stats
+  stats:
+    handler: src/stats.handler
+    events:
+      - http:
+          path: /stats/click
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
