@@ -352,6 +352,20 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': UsersGetResponse
+      - http:
+          path: /users
+          method: delete
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 유저 삭제
+            description: 'DB에 저장된 유저의 정보를 삭제한다'
+            tags:
+              - Users
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
   # Post
   posts:
     handler: src/posts.handler
