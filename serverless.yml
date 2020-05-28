@@ -131,9 +131,19 @@ custom:
     #     description: 'This is the description for some/other/path'
     models:
       # Request
+      #Auth
       - name: AuthPostRequest
         contentType: 'application/json'
         schema: ${file(models/request/auth/post.json)}
+        # Posts
+      - name: PostsPostRequest
+        contentType: 'application/json'
+        schema: ${file(models/request/posts/post.json)}
+        # Posts/{pid}
+      - name: PostsPidRatesPutRequest
+        contentType: 'application/json'
+        schema: ${file(models/request/posts/pid/rates/put.json)}
+
       # Response
       # Test
       - name: HelloGetResponse
@@ -147,6 +157,13 @@ custom:
       - name: PostsGetResponse
         contentType: 'application/json'
         schema: ${file(models/response/posts/get.json)}
+      - name: PostsPostResponse
+        contentType: 'application/json'
+        schema: ${file(models/response/posts/post.json)}
+        # Posts/{pid}
+      - name: PostsPidGetResponse
+        contentType: 'application/json'
+        schema: ${file(models/response/posts/pid/get.json)}
         # Search
       - name: SearchGetResponse
         contentType: 'application/json'
@@ -156,6 +173,11 @@ custom:
         description: 'This is an error'
         contentType: 'application/json'
         schema: ${file(models/error.json)}
+        # Default
+      - name: ProcessingSuccessResponse
+        description: 'Success and response is null'
+        contentType: 'application/json'
+        schema: ${file(models/204.json)}
       # - name: 'CreateRequest'
       #   description: 'Model for creating something'
       #   contentType: 'application/json'
@@ -297,7 +319,7 @@ functions:
                 description: '검색할 장소(해시태그)'
                 required: true
               - name: 'section'
-                description: '장소를 구분짓는 그룹 (default: ALL)'
+                description: '장소를 구분짓는 그룹 (default: SEC_ALL)'
               - name: 'skip'
                 description: '게시글 결과를 앞에서 부터 생략할 갯수 (default: 0)'
               - name: 'limit'
@@ -325,6 +347,103 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': PostsGetResponse
+      - http:
+          path: /posts
+          method: post
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 업로드
+            description: '게시글을 업로드한다.'
+            tags:
+              - Posts
+            requestBody:
+              description: >
+                *location: 검색할 장소(해시태그)
+                section: 장소를 구분짓는 그룹 (default: SEC_ALL)
+                img_url: 게시글 이미지 URL (default: https://s3.instatour.tech/blank.jpg)
+                content: 게시글 내용 (default: '')
+            requestModels:
+              'application/json': PostsPostRequest
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': PostsPostResponse
+      - http:
+          path: /posts/{pid}
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 가져오기
+            description: '게시글을 가져오고 CLICKED 관계를 연결한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': PostsPidGetResponse
+      - http:
+          path: /posts/{pid}/heart
+          method: post
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 찜하기
+            description: '게시글을 찜한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
+      - http:
+          path: /posts/{pid}/heart
+          method: delete
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 찜해제
+            description: '게시글을 찜을 해제한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
+      - http:
+          path: /posts/{pid}/rates
+          method: put
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글에 별점주기
+            description: '게시글에 별점을 준다.'
+            tags:
+              - Posts
+            requestBody:
+              description: >
+                *rates: 게시글에 부여할 별점 (범위 제한 없음)
+            requestModels:
+              'application/json': PostsPidRatesPutRequest
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
+      - http:
+          path: /posts/{pid}/rates
+          method: delete
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글에 별점삭제
+            description: '게시글에 별점을 삭제한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

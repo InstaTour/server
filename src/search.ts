@@ -5,7 +5,6 @@ dotenv.config();
 // Serverless http
 import * as serverless from 'serverless-http';
 import * as Koa from 'koa';
-// const bodyParser = require('koa-bodyparser');
 import * as Router from 'koa-router';
 
 // Koa 설정
@@ -49,7 +48,7 @@ router.get('/', async (ctx) => {
   const location = ctx.request.query.location;
   const section: Sections = isSections(ctx.request.query.section)
     ? ctx.request.query.section
-    : 'ALL';
+    : 'SEC_ALL';
   const limit = int(ctx.request.query.limit || 5);
   const skip = int(ctx.request.query.skip || 0);
   console.log({ location, section, limit, skip });

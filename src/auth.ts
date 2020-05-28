@@ -6,7 +6,6 @@ dotenv.config();
 import * as serverless from 'serverless-http';
 import * as Koa from 'koa';
 
-// const bodyParser = require('koa-bodyparser');
 import * as bodyParser from 'koa-bodyparser';
 import * as Router from 'koa-router';
 

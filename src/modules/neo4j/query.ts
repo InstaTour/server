@@ -1,7 +1,13 @@
 export const enum Query {
   create_user = 'CREATE (:User {id: $id, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME()})',
   create_post_instagram = 'CREATE (:Post:Instagram {id: $key, img_url: $img_url, content: $content, likes: $likes, date: $date})',
-  create_post_instatour = 'CREATE (:Post:Instatour {id: $key, img_url: $img_url, content: $content, likes: $likes, date: $date})',
+  create_post_instatour = `MATCH (user:User {id: $uid})
+                          MATCH (tag:HashTag {id: $hid})
+                          CREATE (user)-[:POSTED]->(post:Post:InstaTour {id: apoc.create.uuid(), img_url: $img_url, content: $content, likes: 0, date: DATETIME()})
+                          WITH post, tag
+                          CALL apoc.create.relationship(post, $section, {}, tag)
+                          YIELD rel
+                          RETURN post`,
   update_user = `MATCH (p:User {id: $id})
                 CALL apoc.create.setProperties(p, $keys, $values) YIELD node 
                 RETURN node`,
@@ -16,8 +22,12 @@ export const enum Query {
                         OPTIONAL MATCH (user)-[rated:RATED]->(post)
                         WITH post, hearted, rated
                         ORDER BY hearted, post.likes DESC
-                        WITH COLLECT(post {.*, hearted: hearted, rated: rated}) as postlist
-                        RETURN postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num`,
+                        WITH COLLECT(post {.*, hearted: hearted, rated: rated}) AS postlist
+                        RETURN postlist[$skip..$skip+$limit] AS posts, SIZE(postlist) AS num`,
+  get_post = `MATCH (n:User {id: $uid})
+              MATCH (post:Post {id: $pid})
+              CREATE (n)-[:CLICKED {created_at: DATETIME()}]->(post)
+              RETURN post`,
   heart_post = `MATCH (n:User {id: $uid})
                 MATCH (p:Post {id: $pid})
                 CREATE (n)-[r:HEARTED {created_at: DATETIME()}]->(p)
@@ -25,16 +35,12 @@ export const enum Query {
   delete_heart = `MATCH (n:User {id: $uid})-[r:HEARTED]->(p:Post {id: $pid})
                   DELETE r
                   RETURN n, r, p`,
-  rate_post = `MATCH (n:User {id: $uid})
-              MATCH (p:Post {id: $pid})
-              MERGE (n)-[r:RATED]->(p)
-              SET r.updated_at = DATETIME(), r.rates = $rates
-              RETURN n, r, p`,
+  rates_post = `MATCH (n:User {id: $uid})
+                MATCH (p:Post {id: $pid})
+                MERGE (n)-[r:RATED]->(p)
+                SET r.updated_at = DATETIME(), r.rates = $rates
+                RETURN n, r, p`,
   delete_rate = `MATCH (n:User {id: $uid})-[r:RATED]->(p:Post {id: $pid})
                 DELETE r
-                RETURN n, r, p`,
-  click_post = `MATCH (n:User {id: $uid})
-                MATCH (p:Post {id: $pid})
-                CREATE (n)-[r:CLICKED {created_at: DATETIME()}]->(p)
                 RETURN n, r, p`,
 }

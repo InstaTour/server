@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "location": {
+      "type": "string"
+    },
+    "section": {
+      "type": "string"
+    },
+    "img_url": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  },
+  "required": ["location"]
+}
