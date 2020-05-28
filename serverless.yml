@@ -131,9 +131,14 @@ custom:
     #     description: 'This is the description for some/other/path'
     models:
       # Request
+      #Auth
       - name: AuthPostRequest
         contentType: 'application/json'
         schema: ${file(models/request/auth/post.json)}
+        # Posts
+      - name: PostsPostRequest
+        contentType: 'application/json'
+        schema: ${file(models/request/posts/post.json)}
       # Response
       # Test
       - name: HelloGetResponse
@@ -147,6 +152,9 @@ custom:
       - name: PostsGetResponse
         contentType: 'application/json'
         schema: ${file(models/response/posts/get.json)}
+      - name: PostsPostResponse
+        contentType: 'application/json'
+        schema: ${file(models/response/posts/post.json)}
         # Search
       - name: SearchGetResponse
         contentType: 'application/json'
@@ -297,7 +305,7 @@ functions:
                 description: '검색할 장소(해시태그)'
                 required: true
               - name: 'section'
-                description: '장소를 구분짓는 그룹 (default: ALL)'
+                description: '장소를 구분짓는 그룹 (default: SEC_ALL)'
               - name: 'skip'
                 description: '게시글 결과를 앞에서 부터 생략할 갯수 (default: 0)'
               - name: 'limit'
@@ -330,6 +338,23 @@ functions:
           method: post
           cors: true
           authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 업로드
+            description: '게시글을 업로드한다.'
+            tags:
+              - Posts
+            requestBody:
+              description: >
+                *location: 검색할 장소(해시태그)
+                section: 장소를 구분짓는 그룹 (default: SEC_ALL)
+                img_url: 게시글 이미지 URL (default: https://s3.instatour.tech/blank.jpg)
+                content: 게시글 내용 (default: '')
+            requestModels:
+              'application/json': PostsPostRequest
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': PostsPostResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
