@@ -13,5 +13,6 @@
     "content": {
       "type": "string"
     }
-  }
+  },
+  "required": ["location"]
 }
