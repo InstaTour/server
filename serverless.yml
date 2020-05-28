@@ -168,6 +168,11 @@ custom:
         description: 'This is an error'
         contentType: 'application/json'
         schema: ${file(models/error.json)}
+        # Default
+      - name: ProcessingSuccessResponse
+        description: 'Success and response is null'
+        contentType: 'application/json'
+        schema: ${file(models/204.json)}
       # - name: 'CreateRequest'
       #   description: 'Model for creating something'
       #   contentType: 'application/json'
@@ -378,6 +383,15 @@ functions:
           method: post
           cors: true
           authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 찜하기
+            description: '게시글을 찜한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
