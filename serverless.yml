@@ -430,6 +430,11 @@ functions:
               - statusCode: '204'
                 responseModels:
                   'application/json': ProcessingSuccessResponse
+      - http:
+          path: /posts/{pid}/rates
+          method: delete
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
