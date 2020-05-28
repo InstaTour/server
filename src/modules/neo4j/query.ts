@@ -1,5 +1,5 @@
 export const enum Query {
-  create_user = 'CREATE (:User {id: $id, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME()})',
+  create_user = 'CREATE (:User {id: $uid, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME()})',
   create_post_instagram = 'CREATE (:Post:Instagram {id: $key, img_url: $img_url, content: $content, likes: $likes, date: $date})',
   create_post_instatour = `MATCH (user:User {id: $uid})
                           MATCH (tag:HashTag {id: $hid})
@@ -8,10 +8,10 @@ export const enum Query {
                           CALL apoc.create.relationship(post, $section, {}, tag)
                           YIELD rel
                           RETURN post`,
-  update_user = `MATCH (p:User {id: $id})
+  update_user = `MATCH (p:User {id: $uid})
                 CALL apoc.create.setProperties(p, $keys, $values) YIELD node 
                 RETURN node`,
-  update_post = `MATCH (p:Post {id: $id}) 
+  update_post = `MATCH (p:Post {id: $pid}) 
                 CALL apoc.create.setProperties(p, $keys, $values) YIELD node 
                 RETURN node`,
   post_hashtag_relation = `MATCH (p:Post {id: $pid}) 

@@ -97,6 +97,7 @@ router.post('/', bodyParser(), async (ctx) => {
     );
   }
   const result = results[0];
+  console.log('result', result);
 
   // 결과 파싱하여 넣기
   let res = {
@@ -155,6 +156,7 @@ router.get('/:pid', async (ctx) => {
     );
   }
   const result = results[0];
+  console.log('result', result);
 
   // 결과 파싱하여 넣기
   let res = {

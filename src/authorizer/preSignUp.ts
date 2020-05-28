@@ -14,7 +14,7 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
 
   let params = {
     ...event.request.userAttributes,
-    id: event.userName,
+    uid: event.userName,
   };
 
   await tx([Query.create_user], [params]);

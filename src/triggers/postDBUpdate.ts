@@ -66,7 +66,7 @@ exports.handler = async (event: any, context: Context, callback: Callback) => {
 
       querys.push(Query.update_post);
       params.push({
-        id: key,
+        pid: key,
         keys: Object.keys(img),
         values: Object.values(img),
       });
