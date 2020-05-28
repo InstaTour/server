@@ -328,6 +328,15 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': SearchGetResponse
+  # User
+  users:
+    handler: src/users.handler
+    events:
+      - http:
+          path: /users
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
   # Post
   posts:
     handler: src/posts.handler

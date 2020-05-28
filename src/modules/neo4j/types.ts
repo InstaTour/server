@@ -15,6 +15,19 @@ const sections = stringLitArray([
 export type Sections = typeof sections[number];
 export const isSections = (x: any): x is Sections => sections.includes(x);
 
+export interface UserNode extends Node {
+  properties: User;
+}
+
+export interface User {
+  created_at: DateTime | string;
+  updated_at: DateTime | string;
+  id: string;
+  nickname: string;
+  profile: string;
+  email: string;
+}
+
 export interface PostNode extends Node {
   properties: Post;
 }
