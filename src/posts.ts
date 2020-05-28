@@ -5,7 +5,7 @@ dotenv.config();
 // Serverless http
 import * as serverless from 'serverless-http';
 import * as Koa from 'koa';
-// const bodyParser = require('koa-bodyparser');
+import * as bodyParser from 'koa-bodyparser';
 import * as Router from 'koa-router';
 
 // Koa 설정
@@ -23,10 +23,13 @@ const awsSdk = captureAWS(rawAWS);
 
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
+import { getUserInfo } from './modules/cognito';
+import { Query, tx, toNumber } from './modules/neo4j';
+import { Sections, Post, PostNode, Integer } from './modules/neo4j/types';
 
 /**
  * Route: /posts
- * Method: get
+ * Method: get, post
  */
 
 /* 테스트용 이미지 가져오기 */
@@ -42,6 +45,81 @@ router.get('/', async (ctx) => {
   ];
 
   createResponse(ctx, statusCode.success, { posts });
+});
+
+/* 게시글 업로드 */
+router.post('/', bodyParser(), async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // 파라미터 가져오기
+  const location = ctx.request.body.location;
+  let section: Sections = ctx.request.body.section || 'SEC_ALL';
+  const img_url =
+    ctx.request.body.img_url || 'https://s3.instatour.tech/blank.jpg';
+  const content = ctx.request.body.content || '';
+
+  // 파라미터 오류 체크
+  if (!location) {
+    console.error('Body (location) is undefined');
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'Body (location) is undefined'
+    );
+  }
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 섹션 SEC_ALL은 TAGGED로 쿼리한다.
+  if (section == 'SEC_ALL') {
+    section = 'TAGGED';
+  }
+
+  // 쿼리 보내기
+  const results = await tx(
+    [Query.create_post_instatour],
+    [{ hid: location, uid: user.username, section, img_url, content }]
+  );
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+
+  // 결과 파싱하여 넣기
+  let res = {
+    post: null as Post | null,
+  };
+  result.records.forEach((r) => {
+    console.log(r);
+
+    // 게시글 결과 가져오기
+    const postsNode: PostNode = r.get('post');
+    console.log('postsNode', postsNode);
+    if (postsNode) {
+      const post: Post = postsNode.properties;
+      post.likes = toNumber(post.likes as Integer) || 0;
+      post.rated = null;
+      post.hearted = null;
+      post.date = post.date.toString();
+
+      res.post = post;
+    }
+  });
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.success, res);
 });
 
 // Lambda로 내보내기

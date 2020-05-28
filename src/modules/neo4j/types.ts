@@ -1,4 +1,4 @@
-import { DateTime, Integer, Node, Relationship, Time } from 'neo4j-driver';
+import { DateTime, Integer, Node, Relationship } from 'neo4j-driver';
 
 // From neo4j-driver
 export { Integer };
@@ -15,14 +15,17 @@ const sections = stringLitArray([
 export type Sections = typeof sections[number];
 export const isSections = (x: any): x is Sections => sections.includes(x);
 
+export interface PostNode extends Node {
+  properties: Post;
+}
 export interface Post {
   rated: Rated | RatedRelationship | null;
   hearted: Hearted | HeartedRelationship | null;
-  date: DateTime;
+  date: DateTime | string;
   id: string;
   img_url: string;
   content: string;
-  likes: Number;
+  likes: Number | Integer;
 }
 
 export interface HeartedRelationship extends Relationship {
