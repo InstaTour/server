@@ -30,6 +30,10 @@ export const enum Query {
               MATCH (post:Post {id: $pid})
               CREATE (n)-[:CLICKED {created_at: DATETIME()}]->(post)
               RETURN post`,
+  get_user_heart = `MATCH (user:User {id: $uid})-[r:HEARTED]->(post)
+                    WITH user, post, r
+                    ORDER BY r.created_at DESC
+                    RETURN user, COLLECT(post) as posts`,
   delete_user = `MATCH (user:User {id: $id})
                 DETACH DELETE user
                 RETURN user`,
