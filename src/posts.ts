@@ -122,6 +122,63 @@ router.post('/', bodyParser(), async (ctx) => {
   createResponse(ctx, statusCode.success, res);
 });
 
+/**
+ * Route: /posts/{pid}
+ * Method: get
+ */
+
+/* TODO: 게시글 정보 가져오기 */
+router.get('/:pid', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // 파라미터 가져오기
+  const pid = ctx.params.pid;
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx([Query.get_post], [{ pid, uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+
+  // 결과 파싱하여 넣기
+  let res = {
+    post: null as Post | null,
+  };
+  result.records.forEach((r) => {
+    console.log(r);
+
+    // 게시글 결과 가져오기
+    const postsNode: PostNode = r.get('post');
+    console.log('postsNode', postsNode);
+    if (postsNode) {
+      const post: Post = postsNode.properties;
+      post.likes = toNumber(post.likes as Integer) || 0;
+      post.rated = null;
+      post.hearted = null;
+      post.date = post.date.toString();
+
+      res.post = post;
+    }
+  });
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.success, res);
+});
+
 // Lambda로 내보내기
 module.exports.handler = serverless(app, {
   basePath: process.env.API_VERSION,

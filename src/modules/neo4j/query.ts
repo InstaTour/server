@@ -24,6 +24,10 @@ export const enum Query {
                         ORDER BY hearted, post.likes DESC
                         WITH COLLECT(post {.*, hearted: hearted, rated: rated}) AS postlist
                         RETURN postlist[$skip..$skip+$limit] AS posts, SIZE(postlist) AS num`,
+  get_post = `MATCH (n:User {id: $uid})
+              MATCH (post:Post {id: $pid})
+              CREATE (n)-[:CLICKED {created_at: DATETIME()}]->(post)
+              RETURN post`,
   heart_post = `MATCH (n:User {id: $uid})
                 MATCH (p:Post {id: $pid})
                 CREATE (n)-[r:HEARTED {created_at: DATETIME()}]->(p)
@@ -38,9 +42,5 @@ export const enum Query {
               RETURN n, r, p`,
   delete_rate = `MATCH (n:User {id: $uid})-[r:RATED]->(p:Post {id: $pid})
                 DELETE r
-                RETURN n, r, p`,
-  click_post = `MATCH (n:User {id: $uid})
-                MATCH (p:Post {id: $pid})
-                CREATE (n)-[r:CLICKED {created_at: DATETIME()}]->(p)
                 RETURN n, r, p`,
 }
