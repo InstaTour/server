@@ -397,6 +397,15 @@ functions:
           method: delete
           cors: true
           authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: 게시글 찜해제
+            description: '게시글을 찜을 해제한다.'
+            tags:
+              - Posts
+            methodResponses:
+              - statusCode: '204'
+                responseModels:
+                  'application/json': ProcessingSuccessResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
