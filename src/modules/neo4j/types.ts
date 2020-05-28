@@ -6,7 +6,12 @@ export { Integer };
 // From Custom interface
 const stringLitArray = <L extends string>(arr: L[]) => arr;
 
-const sections = stringLitArray(['ALL', 'SIGHTS', 'FOOD']);
+const sections = stringLitArray([
+  'TAGGED',
+  'SEC_ALL',
+  'SEC_SIGHTS',
+  'SEC_FOOD',
+]);
 export type Sections = typeof sections[number];
 export const isSections = (x: any): x is Sections => sections.includes(x);
 

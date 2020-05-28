@@ -49,7 +49,7 @@ router.get('/', async (ctx) => {
   const location = ctx.request.query.location;
   const section: Sections = isSections(ctx.request.query.section)
     ? ctx.request.query.section
-    : 'ALL';
+    : 'SEC_ALL';
   const limit = int(ctx.request.query.limit || 5);
   const skip = int(ctx.request.query.skip || 0);
   console.log({ location, section, limit, skip });
