@@ -32,13 +32,14 @@ export interface PostNode extends Node {
   properties: Post;
 }
 export interface Post {
-  rated: Rated | RatedRelationship | null;
-  hearted: Hearted | HeartedRelationship | null;
   date: DateTime | string;
   id: string;
   img_url: string;
   content: string;
   likes: Number | Integer;
+  rated?: Rated | RatedRelationship | null;
+  hearted?: Hearted | HeartedRelationship | null;
+  views?: Number | Integer;
 }
 
 export interface HeartedRelationship extends Relationship {
