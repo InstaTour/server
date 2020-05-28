@@ -216,6 +216,38 @@ router.post('/:pid/heart', async (ctx) => {
   createResponse(ctx, statusCode.processingSuccess, null);
 });
 
+/* 게시글 찜 해제하기 */
+router.delete('/:pid/heart', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // 파라미터 가져오기
+  const pid = ctx.params.pid;
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx([Query.delete_heart], [{ pid, uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.processingSuccess, null);
+});
+
 // Lambda로 내보내기
 module.exports.handler = serverless(app, {
   basePath: process.env.API_VERSION,
