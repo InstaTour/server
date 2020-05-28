@@ -127,7 +127,7 @@ router.post('/', bodyParser(), async (ctx) => {
  * Method: get
  */
 
-/* TODO: 게시글 정보 가져오기 */
+/* 게시글 정보 가져오기 */
 router.get('/:pid', async (ctx) => {
   // 함수 호출위치 로그
   console.log(ctx.request.url, ctx.request.method);
@@ -177,6 +177,43 @@ router.get('/:pid', async (ctx) => {
 
   // 결과값 반환
   createResponse(ctx, statusCode.success, res);
+});
+
+/**
+ * Route: /posts/{pid}/heart
+ * Method: post, delete
+ */
+
+/* 게시글 찜하기 */
+router.post('/:pid/heart', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // 파라미터 가져오기
+  const pid = ctx.params.pid;
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx([Query.heart_post], [{ pid, uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.processingSuccess, null);
 });
 
 // Lambda로 내보내기

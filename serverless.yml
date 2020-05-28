@@ -373,6 +373,11 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': PostsPidGetResponse
+      - http:
+          path: /posts/{pid}/heart
+          method: post
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
