@@ -58,6 +58,7 @@ router.post('/', bodyParser(), async (ctx) => {
   const img_url =
     ctx.request.body.img_url || 'https://s3.instatour.tech/blank.jpg';
   const content = ctx.request.body.content || '';
+  console.log('[Parameter]', { location, img_url, content });
 
   // 파라미터 오류 체크
   if (!location) {
@@ -134,6 +135,7 @@ router.get('/:pid', async (ctx) => {
 
   // 파라미터 가져오기
   const pid = ctx.params.pid;
+  console.log('[Parameter]', { pid });
 
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
@@ -191,6 +193,7 @@ router.post('/:pid/heart', async (ctx) => {
 
   // 파라미터 가져오기
   const pid = ctx.params.pid;
+  console.log('[Parameter]', { pid });
 
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
@@ -223,12 +226,66 @@ router.delete('/:pid/heart', async (ctx) => {
 
   // 파라미터 가져오기
   const pid = ctx.params.pid;
+  console.log('[Parameter]', { pid });
 
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
 
   // 쿼리 보내기
   const results = await tx([Query.delete_heart], [{ pid, uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.processingSuccess, null);
+});
+
+/**
+ * Route: /posts/{pid}/rates
+ * Method: put, delete
+ */
+
+/* 게시글에 별점주기 */
+router.put('/:pid/rates', bodyParser(), async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // 파라미터 가져오기
+  const pid = ctx.params.pid;
+  const rates = ctx.request.body.rates;
+  console.log('[Parameter]', { pid, rates });
+
+  // 파라미터 오류 체크
+  if (!rates) {
+    console.error('Body (rates) is undefined');
+    return createResponse(
+      ctx,
+      statusCode.requestError,
+      null,
+      'Body (rate) is undefined'
+    );
+  }
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx(
+    [Query.rates_post],
+    [{ pid, uid: user.username, rates }]
+  );
   console.log('results', results);
 
   // 서버에서 값이 안넘어올시 에러

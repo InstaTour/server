@@ -35,11 +35,11 @@ export const enum Query {
   delete_heart = `MATCH (n:User {id: $uid})-[r:HEARTED]->(p:Post {id: $pid})
                   DELETE r
                   RETURN n, r, p`,
-  rate_post = `MATCH (n:User {id: $uid})
-              MATCH (p:Post {id: $pid})
-              MERGE (n)-[r:RATED]->(p)
-              SET r.updated_at = DATETIME(), r.rates = $rates
-              RETURN n, r, p`,
+  rates_post = `MATCH (n:User {id: $uid})
+                MATCH (p:Post {id: $pid})
+                MERGE (n)-[r:RATED]->(p)
+                SET r.updated_at = DATETIME(), r.rates = $rates
+                RETURN n, r, p`,
   delete_rate = `MATCH (n:User {id: $uid})-[r:RATED]->(p:Post {id: $pid})
                 DELETE r
                 RETURN n, r, p`,
