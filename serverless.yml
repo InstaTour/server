@@ -123,6 +123,8 @@ custom:
         description: Cognito 관련 API
       - name: Search
         description: 검색 관련 API
+      - name: Stats
+        description: 통계 관련 API
     authorizers:
       - name: MyCognitoAuthorizer
         description: 'AWS Cognito의 인증 토큰'
@@ -178,6 +180,9 @@ custom:
       - name: SearchGetResponse
         contentType: 'application/json'
         schema: ${file(models/response/search/get.json)}
+      - name: StatsClickGetResponse
+        contentType: 'application/json'
+        schema: ${file(models/response/stats/click/get.json)}
         # Error
       - name: ErrorResponse
         description: 'This is an error'
@@ -509,6 +514,22 @@ functions:
           method: get
           cors: true
           authorizer: ${self:custom.myAuthorizer}
+          documentation:
+            summary: '탑 클릭 통계'
+            description: 'n일간의 클릭수가 많은 게시글들을 찾는다.'
+            tags:
+              - Stats
+            queryParams:
+              - name: 'date'
+                description: 'n일전~오늘까지의 통계 (default: 0, 양수)'
+              - name: 'skip'
+                description: '게시글 결과를 앞에서 부터 생략할 갯수 (default: 0)'
+              - name: 'limit'
+                description: '게시글 결과를 받아올 갯수 (default: 5)'
+            methodResponses:
+              - statusCode: '200'
+                responseModels:
+                  'application/json': StatsClickGetResponse
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
