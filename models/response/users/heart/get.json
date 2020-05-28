@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "posts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "img_url": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "likes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}
