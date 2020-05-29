@@ -37,8 +37,8 @@ export interface Post {
   img_url: string;
   content: string;
   likes: Number | Integer;
-  rated?: Rated | RatedRelationship | null;
-  hearted?: Hearted | HeartedRelationship | null;
+  rated?: Rated | RatedRelationship | Number | null;
+  hearted?: Hearted | HeartedRelationship | boolean | null;
   views?: Number | Integer;
 }
 
@@ -56,5 +56,5 @@ export interface RatedRelationship extends Relationship {
 
 export interface Rated {
   updated_at: DateTime | string;
-  rating: Number;
+  rates: Number;
 }

@@ -29,7 +29,6 @@ import {
   Post,
   Integer,
   Sections,
-  HeartedRelationship,
   RatedRelationship,
 } from './modules/neo4j/types';
 import { getUserInfo } from './modules/cognito';
@@ -98,14 +97,13 @@ router.get('/', async (ctx) => {
     console.log('postsNodes', postsNodes);
     if (postsNodes) {
       postsNodes.forEach((node) => {
-        if (node.hearted) {
-          node.hearted = (node.hearted as HeartedRelationship).properties;
-          node.hearted.created_at = node.hearted.created_at.toString();
-        }
-        if (node.rated) {
-          node.rated = (node.rated as RatedRelationship).properties;
-          node.rated.updated_at = node.rated.updated_at.toString();
-        }
+        node.hearted = node.hearted ? true : false;
+        node.rated = node.rated
+          ? (node.rated as RatedRelationship).properties.rates
+          : 0;
+
+        node.date = node.date.toString();
+        node.likes = toNumber(node.likes) || 0;
 
         res.posts.push(node);
       });
