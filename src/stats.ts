@@ -41,7 +41,7 @@ router.get('/click', async (ctx) => {
   const user = getUserInfo(ctx);
 
   // 파라미터 가져오기
-  const date = int(ctx.request.query.limit || 0).negate();
+  const date = int(ctx.request.query.date || 0).negate();
   const limit = int(ctx.request.query.limit || 5);
   const skip = int(ctx.request.query.skip || 0);
   console.log({ date, limit, skip });
