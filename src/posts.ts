@@ -25,7 +25,7 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
 import { Query, tx, toNumber } from './modules/neo4j';
-import { Sections, Post, PostNode, Integer } from './modules/neo4j/types';
+import { Sections, Post, PostNode } from './modules/neo4j/types';
 
 /**
  * Route: /posts
@@ -111,7 +111,7 @@ router.post('/', bodyParser(), async (ctx) => {
     console.log('postsNode', postsNode);
     if (postsNode) {
       const post: Post = postsNode.properties;
-      post.likes = toNumber(post.likes as Integer) || 0;
+      post.likes = toNumber(post.likes) || 0;
       post.rated = null;
       post.hearted = null;
       post.date = post.date.toString();
@@ -170,7 +170,7 @@ router.get('/:pid', async (ctx) => {
     console.log('postsNode', postsNode);
     if (postsNode) {
       const post: Post = postsNode.properties;
-      post.likes = toNumber(post.likes as Integer) || 0;
+      post.likes = toNumber(post.likes) || 0;
       post.rated = null;
       post.hearted = null;
       post.date = post.date.toString();

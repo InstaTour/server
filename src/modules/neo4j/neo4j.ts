@@ -39,7 +39,8 @@ export async function tx(querys: Query[], params: Parameters[]) {
   }
 }
 
-export function toNumber(num: Integer) {
-  if (neo4j.integer.inSafeRange(num)) return num.toNumber();
+export function toNumber(num: any) {
+  if (typeof num == 'number') return num;
+  else if (neo4j.integer.inSafeRange(num)) return num.toNumber();
   else return null;
 }
