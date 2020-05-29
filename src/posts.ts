@@ -277,7 +277,7 @@ router.put('/:pid/rates', bodyParser(), async (ctx) => {
 
   // 파라미터 가져오기
   const pid = ctx.params.pid;
-  const rates = ctx.request.body.rates;
+  const rates = Number(ctx.request.body.rates);
   console.log('[Parameter]', { pid, rates });
 
   // 파라미터 오류 체크
