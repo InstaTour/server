@@ -25,7 +25,7 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
 import { Query, tx, toNumber } from './modules/neo4j';
-import { Sections, Post, PostNode } from './modules/neo4j/types';
+import { Sections, Post, PostNode, Integer } from './modules/neo4j/types';
 
 /**
  * Route: /posts
@@ -172,6 +172,8 @@ router.get('/:pid', async (ctx) => {
   // 결과 파싱하여 넣기
   let res = {
     post: null as Post | null,
+    avg_rates: 0,
+    reviews: 0,
   };
   result.records.forEach((r) => {
     console.log(r);
@@ -182,12 +184,16 @@ router.get('/:pid', async (ctx) => {
     if (postsNode) {
       const post: Post = postsNode.properties;
       post.likes = toNumber(post.likes) || 0;
-      post.rated = null;
-      post.hearted = null;
       post.date = post.date.toString();
 
       res.post = post;
     }
+
+    const avg_rates: number = r.get('avg_rates');
+    res.avg_rates = avg_rates;
+
+    const reviews: Integer = r.get('reviews');
+    res.reviews = toNumber(reviews);
   });
 
   // 결과값 반환
