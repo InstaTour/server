@@ -24,7 +24,7 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
 import { tx, Query, int } from './modules/neo4j';
-import { User, UserNode, Post, PostNode, Integer } from './modules/neo4j/types';
+import { Post } from './modules/neo4j/types';
 import { toNumber } from './modules/neo4j/neo4j';
 
 /**
@@ -41,7 +41,7 @@ router.get('/click', async (ctx) => {
   const user = getUserInfo(ctx);
 
   // 파라미터 가져오기
-  const date = int(ctx.request.query.limit || 0).negate();
+  const date = int(ctx.request.query.date || 0).negate();
   const limit = int(ctx.request.query.limit || 5);
   const skip = int(ctx.request.query.skip || 0);
   console.log({ date, limit, skip });
@@ -76,8 +76,8 @@ router.get('/click', async (ctx) => {
     if (postsNodes) {
       postsNodes.forEach((node) => {
         node.date = node.date.toString();
-        node.views = toNumber(node.views as Integer) || 0;
-        node.likes = toNumber(node.likes as Integer) || 0;
+        node.views = toNumber(node.views) || 0;
+        node.likes = toNumber(node.likes) || 0;
 
         res.posts.push(node);
       });

@@ -71,6 +71,9 @@ router.post('/', bodyParser(), async (ctx) => {
     );
   }
 
+  // img_url의 배열 파싱
+  const img_array = JSON.parse(img_url.replace(/'/g, '"'));
+
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
 
@@ -82,7 +85,15 @@ router.post('/', bodyParser(), async (ctx) => {
   // 쿼리 보내기
   const results = await tx(
     [Query.create_post_instatour],
-    [{ hid: location, uid: user.username, section, img_url, content }]
+    [
+      {
+        hid: location,
+        uid: user.username,
+        section,
+        img_url: img_array,
+        content,
+      },
+    ]
   );
   console.log('results', results);
 
@@ -111,7 +122,7 @@ router.post('/', bodyParser(), async (ctx) => {
     console.log('postsNode', postsNode);
     if (postsNode) {
       const post: Post = postsNode.properties;
-      post.likes = toNumber(post.likes as Integer) || 0;
+      post.likes = toNumber(post.likes) || 0;
       post.rated = null;
       post.hearted = null;
       post.date = post.date.toString();
@@ -161,6 +172,8 @@ router.get('/:pid', async (ctx) => {
   // 결과 파싱하여 넣기
   let res = {
     post: null as Post | null,
+    avg_rates: 0,
+    reviews: 0,
   };
   result.records.forEach((r) => {
     console.log(r);
@@ -170,13 +183,17 @@ router.get('/:pid', async (ctx) => {
     console.log('postsNode', postsNode);
     if (postsNode) {
       const post: Post = postsNode.properties;
-      post.likes = toNumber(post.likes as Integer) || 0;
-      post.rated = null;
-      post.hearted = null;
+      post.likes = toNumber(post.likes) || 0;
       post.date = post.date.toString();
 
       res.post = post;
     }
+
+    const avg_rates: number = r.get('avg_rates');
+    res.avg_rates = avg_rates;
+
+    const reviews: Integer = r.get('reviews');
+    res.reviews = toNumber(reviews);
   });
 
   // 결과값 반환
@@ -266,7 +283,7 @@ router.put('/:pid/rates', bodyParser(), async (ctx) => {
 
   // 파라미터 가져오기
   const pid = ctx.params.pid;
-  const rates = ctx.request.body.rates;
+  const rates = Number(ctx.request.body.rates);
   console.log('[Parameter]', { pid, rates });
 
   // 파라미터 오류 체크

@@ -21,14 +21,14 @@
             },
             "likes": {
               "type": "string"
-            },
-            "rated": {
-              "type": "string"
-            },
-            "hearted": {
-              "type": "string"
             }
           }
+        },
+        "avg_rates": {
+          "type": "number"
+        },
+        "reviews": {
+          "type": "integer"
         }
       }
     },

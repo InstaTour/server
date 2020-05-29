@@ -28,8 +28,9 @@ export const enum Query {
               RETURN user`,
   get_post = `MATCH (n:User {id: $uid})
               MATCH (post:Post {id: $pid})
+              MATCH (post)<-[r:RATED]-()
               CREATE (n)-[:CLICKED {created_at: DATETIME()}]->(post)
-              RETURN post`,
+              RETURN post, AVG(r.rates) as avg_rates, COUNT(r) as reviews`,
   get_user_heart = `MATCH (user:User {id: $uid})-[r:HEARTED]->(post)
                     WITH user, post, r
                     ORDER BY r.created_at DESC
