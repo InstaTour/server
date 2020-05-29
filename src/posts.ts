@@ -71,6 +71,9 @@ router.post('/', bodyParser(), async (ctx) => {
     );
   }
 
+  // img_url의 배열 파싱
+  const img_array = JSON.parse(img_url.replace(/'/g, '"'));
+
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
 
@@ -82,7 +85,15 @@ router.post('/', bodyParser(), async (ctx) => {
   // 쿼리 보내기
   const results = await tx(
     [Query.create_post_instatour],
-    [{ hid: location, uid: user.username, section, img_url, content }]
+    [
+      {
+        hid: location,
+        uid: user.username,
+        section,
+        img_url: img_array,
+        content,
+      },
+    ]
   );
   console.log('results', results);
 
