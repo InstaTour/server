@@ -80,10 +80,6 @@ plugins:
   - serverless-offline
 
 custom:
-  dynamodbStream:
-    prod: arn:aws:dynamodb:ap-northeast-2:476436137924:table/InstaTourRawData/stream/2020-05-12T08:17:03.285
-    dev: arn:aws:dynamodb:ap-northeast-2:476436137924:table/Test/stream/2020-05-12T18:10:01.989
-
   myAuthorizer:
     type: COGNITO_USER_POOLS
     authorizerId:
@@ -281,17 +277,6 @@ functions:
       - cognitoUserPool:
         pool: ${env:STAGE}-user-pool
         trigger: PreSignUp
-  # DynamoDB Trigger
-  PostDBUpdate:
-    handler: src/triggers/postDBUpdate.handler
-    timeout: 900
-    events:
-      - stream: ${self:custom.dynamodbStream.${env:STAGE}}
-  imageDownloader:
-    handler: src/triggers/imageDownloader.handler
-    timeout: 900
-    events:
-      - stream: ${self:custom.dynamodbStream.${env:STAGE}}
   # 로그인
   auth:
     handler: src/auth.handler
