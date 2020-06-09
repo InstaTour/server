@@ -285,7 +285,7 @@ functions:
               - Auth
             requestBody:
               description: >
-                username: 로그인할 유저 아이디
+                username: 로그인할 유저 아이디 <br>
                 password: 로그인할 유저 비밀번호
             requestModels:
               'application/json': AuthPostRequest
@@ -398,9 +398,9 @@ functions:
               - Posts
             requestBody:
               description: >
-                *location: 검색할 장소(해시태그)
-                section: 장소를 구분짓는 그룹 (default: SEC_ALL)
-                img_url: 게시글 이미지 URL (default: https://s3.instatour.tech/blank.jpg)
+                *location: 검색할 장소(해시태그) <br>
+                section: 장소를 구분짓는 그룹 (default: SEC_ALL) <br>
+                img_url: 게시글 이미지 URL (default: https://s3.instatour.tech/blank.jpg) <br>
                 content: 게시글 내용 (default: '')
             requestModels:
               'application/json': PostsPostRequest
