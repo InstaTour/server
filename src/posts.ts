@@ -202,13 +202,15 @@ router.get('/:pid', async (ctx) => {
     res.reviews = toNumber(reviews);
 
     const writerNode: UserNode = r.get('writer');
-    const writer: User = writerNode.properties;
-    delete writer.updated_at;
-    delete writer.created_at;
-    delete writer.email;
-    writer.posting = toNumber(writer.posting) || 0;
+    if (writerNode) {
+      const writer: User = writerNode.properties;
+      delete writer.updated_at;
+      delete writer.created_at;
+      delete writer.email;
+      writer.posting = toNumber(writer.posting) || 0;
 
-    res.writer = writer;
+      res.writer = writer;
+    }
   });
 
   // 결과값 반환
