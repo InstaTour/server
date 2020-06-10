@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "profile": {
+                "type": "string"
+              },
+              "nickname": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "posting": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}
