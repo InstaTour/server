@@ -155,6 +155,64 @@ router.get('/heart', async (ctx) => {
         const post: Post = node.properties;
         post.date = toDateString(post.date);
 
+        post.views = toNumber(post.views) || 0;
+        post.likes = toNumber(post.likes) || 0;
+
+        res.posts.push(post);
+      });
+    }
+  });
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.success, res);
+});
+
+/**
+ * Route: /users/posting
+ * Method: get
+ */
+
+/* 유저가 작성한 게시글 정보 반환 */
+router.get('/posting', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 쿼리 보내기
+  const results = await tx([Query.get_user_posting], [{ uid: user.username }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과 파싱하여 넣기
+  let res = {
+    posts: [] as Post[],
+  };
+  result.records.forEach((r) => {
+    console.log(r);
+
+    // 유저 결과 가져오기
+    const posts: PostNode[] = r.get('posts');
+    console.log('posts', posts);
+    if (posts) {
+      posts.forEach((node) => {
+        const post: Post = node.properties;
+        post.date = toDateString(post.date);
+
+        post.views = toNumber(post.views) || 0;
         post.likes = toNumber(post.likes) || 0;
 
         res.posts.push(post);

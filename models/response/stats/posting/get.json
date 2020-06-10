@@ -7,18 +7,21 @@
     "data": {
       "type": "object",
       "properties": {
-        "posts": {
+        "users": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "img_url": {
+              "profile": {
+                "type": "string"
+              },
+              "nickname": {
                 "type": "string"
               },
               "id": {
                 "type": "string"
               },
-              "views": {
+              "posting": {
                 "type": "integer"
               }
             }

@@ -1,6 +1,9 @@
 {
   "type": "object",
   "properties": {
+    "code": {
+      "type": "integer"
+    },
     "data": {
       "type": "object",
       "properties": {
@@ -20,7 +23,7 @@
               "type": "string"
             },
             "likes": {
-              "type": "string"
+              "type": "integer"
             }
           }
         },
@@ -29,6 +32,23 @@
         },
         "reviews": {
           "type": "integer"
+        },
+        "writer": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "profile": {
+              "type": "string"
+            },
+            "nickname": {
+              "type": "string"
+            },
+            "posting": {
+              "type": "integer"
+            }
+          }
         }
       }
     },
