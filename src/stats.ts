@@ -64,7 +64,7 @@ router.get('/click', async (ctx) => {
 
   // 결과 파싱하여 넣기
   let res = {
-    posts: [] as HashTag[],
+    hashtags: [] as HashTag[],
   };
   result.records.forEach((r) => {
     console.log(r);
@@ -76,7 +76,15 @@ router.get('/click', async (ctx) => {
       tagsNodes.forEach((node) => {
         node.views = toNumber(node.views) || 0;
 
-        res.posts.push(node);
+        res.hashtags.push(node);
+      });
+    }
+  });
+
+  // 결과값 반환
+  createResponse(ctx, statusCode.success, res);
+});
+
       });
     }
   });
