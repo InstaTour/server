@@ -8,9 +8,9 @@ Resources:
       ResponseType: EXPIRED_TOKEN
       RestApiId:
         Ref: 'ApiGatewayRestApi'
-      StatusCode: '401'
+      StatusCode: '200'
       ResponseTemplates:
-        application/json: '{"data": null, "message": $context.error.messageString}'
+        application/json: '{"code": 401, "data": null, "message": $context.error.messageString}'
   AuthFailureGatewayResponse:
     Type: 'AWS::ApiGateway::GatewayResponse'
     Properties:
@@ -20,9 +20,9 @@ Resources:
       ResponseType: UNAUTHORIZED
       RestApiId:
         Ref: 'ApiGatewayRestApi'
-      StatusCode: '401'
+      StatusCode: '200'
       ResponseTemplates:
-        application/json: '{"data": null, "message": $context.error.messageString}'
+        application/json: '{"code": 401, "data": null, "message": $context.error.messageString}'
   GatewayResponseDefault4XX:
     Type: 'AWS::ApiGateway::GatewayResponse'
     Properties:
@@ -32,3 +32,18 @@ Resources:
       ResponseType: DEFAULT_4XX
       RestApiId:
         Ref: 'ApiGatewayRestApi'
+      StatusCode: '200'
+      ResponseTemplates:
+        application/json: '{"code": 499, "data": null, "message": $context.error.messageString}'
+  GatewayResponseDefault5XX:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: DEFAULT_5XX
+      RestApiId:
+        Ref: 'ApiGatewayRestApi'
+      StatusCode: '200'
+      ResponseTemplates:
+        application/json: '{"code": 599, "data": null, "message": $context.error.messageString}'

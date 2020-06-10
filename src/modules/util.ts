@@ -10,10 +10,11 @@ export function createResponse(
   body: Object | null,
   err: String | null = null
 ) {
-  ctx.status = status;
+  ctx.status = 200;
   ctx.set('Access-Control-Allow-Origin', '*');
   ctx.set('Access-Control-Allow-Credentials', 'true');
   ctx.body = {
+    code: status,
     message: err,
     data: body,
   };
