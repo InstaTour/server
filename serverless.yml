@@ -508,6 +508,11 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': StatsClickGetResponse
+      - http:
+          path: /stats/posting
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

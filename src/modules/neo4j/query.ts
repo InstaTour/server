@@ -69,4 +69,9 @@ export const enum Query {
                     WITH tag, views, COLLECT(post)[0] as thumbnail
                     WITH COLLECT(tag {.*, views: views, img_url: thumbnail.img_url}) as taglist
                     RETURN taglist[0..5] as hashtags`,
+  stats_top_posting = `MATCH (user:User)
+                      WITH user
+                      ORDER BY user.posting DESC
+                      WITH COLLECT(user) AS userlist
+                      RETURN userlist[$skip..$skip+$limit] AS users`,
 }

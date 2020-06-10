@@ -24,7 +24,7 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
 import { tx, Query, int, toNumber } from './modules/neo4j';
-import { HashTag } from './modules/neo4j/types';
+import { HashTag, User, UserNode } from './modules/neo4j/types';
 
 /**
  * Route: /stats/clcik
@@ -85,6 +85,61 @@ router.get('/click', async (ctx) => {
   createResponse(ctx, statusCode.success, res);
 });
 
+/**
+ * Route: /stats/posting
+ * Method: get
+ */
+
+/* n일간 탑 포스팅 통계 */
+router.get('/posting', async (ctx) => {
+  // 함수 호출위치 로그
+  console.log(ctx.request.url, ctx.request.method);
+
+  // Cognito에서 유저 가져오기
+  const user = getUserInfo(ctx);
+
+  // 파라미터 가져오기
+  const limit = int(ctx.request.query.limit || 5);
+  const skip = int(ctx.request.query.skip || 0);
+  console.log({ limit, skip });
+
+  // 쿼리 보내기
+  const results = await tx([Query.stats_top_posting], [{ limit, skip }]);
+  console.log('results', results);
+
+  // 서버에서 값이 안넘어올시 에러
+  if (!results) {
+    console.error('Database Result is null');
+    return createResponse(
+      ctx,
+      statusCode.dataBaseError,
+      null,
+      'Database Result is null'
+    );
+  }
+  const result = results[0];
+  console.log('result', result);
+
+  // 결과 파싱하여 넣기
+  let res = {
+    users: [] as User[],
+  };
+  result.records.forEach((r) => {
+    console.log(r);
+
+    // 게시글 결과 가져오기
+    const userNodes: UserNode[] = r.get('users');
+    console.log('userNodes', userNodes);
+    if (userNodes) {
+      userNodes.forEach((node) => {
+        const user: User = node.properties;
+        delete user.updated_at;
+        delete user.created_at;
+        delete user.email;
+
+        user.posting = toNumber(user.posting) || 0;
+
+        res.users.push(user);
       });
     }
   });
