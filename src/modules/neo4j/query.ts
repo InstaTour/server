@@ -59,10 +59,14 @@ export const enum Query {
   delete_rate = `MATCH (n:User {id: $uid})-[r:RATED]->(p:Post {id: $pid})
                 DELETE r
                 RETURN n, r, p`,
-  stats_top_click = `MATCH (post:Post)<-[r:CLICKED]-()
-                    WHERE date(datetime({epochmillis:apoc.date.add(timestamp(), 'ms', $date, 'd')})) <= date(datetime(r.created_at)) <=date()
-                    WITH post, COUNT(r) AS views
+  stats_top_click = `MATCH (tag:HashTag)<-[r:CLICKED]-()
+                    WHERE date(datetime({epochmillis:apoc.date.add(timestamp(), 'ms', -30, 'd')})) <= date(datetime(r.created_at)) <=date()
+                    WITH tag, COUNT(r) AS views
                     ORDER BY views DESC
-                    WITH COLLECT(post {.*, views: views}) as postlist
-                    RETURN postlist[$skip..$skip+$limit] as posts`,
+                    MATCH (tag)<-[:TAGGED]-(post:Post)
+                    WITH tag, views, post
+                    ORDER BY post.views DESC
+                    WITH tag, views, COLLECT(post)[0] as thumbnail
+                    WITH COLLECT(tag {.*, views: views, img_url: thumbnail.img_url}) as taglist
+                    RETURN taglist[0..5] as hashtags`,
 }

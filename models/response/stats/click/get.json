@@ -12,16 +12,7 @@
               "img_url": {
                 "type": "string"
               },
-              "likes": {
-                "type": "integer"
-              },
               "id": {
-                "type": "string"
-              },
-              "date": {
-                "type": "string"
-              },
-              "content": {
                 "type": "string"
               },
               "views": {

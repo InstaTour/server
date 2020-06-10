@@ -29,6 +29,16 @@ export interface User {
   posting: Number;
 }
 
+export interface HashTagNode extends Node {
+  properties: HashTag;
+}
+
+export interface HashTag {
+  id: string;
+  section: string;
+  views?: Number | Integer;
+}
+
 export interface PostNode extends Node {
   properties: Post;
 }
