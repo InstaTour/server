@@ -34,9 +34,15 @@ export const enum Query {
                         RETURN postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num`,
   get_user = `MATCH (user:User {id: $uid})
               RETURN user`,
-  get_post = `MATCH (post:Post {id: $pid})<-[r:RATED]-()
+  get_post = `MATCH (post:Post {id: $pid})
+              OPTIONAL MATCH (post)<-[r:RATED]-()
+              OPTIONAL MATCH (post)<-[:POSTED]-(writer)
               CALL apoc.atomic.add(post, 'views', 1) YIELD oldValue, newValue
-              RETURN post, AVG(r.rates) as avg_rates, COUNT(r) as reviews`,
+              WITH post, writer, AVG(r.rates) as avg_rates, COUNT(r) as reviews
+              RETURN post, writer, reviews, (CASE 
+              WHEN avg_rates IS NULL THEN 0
+              ELSE avg_rates
+              END) as avg_rates`,
   get_user_heart = `MATCH (user:User {id: $uid})-[r:HEARTED]->(post)
                     WITH user, post, r
                     ORDER BY r.created_at DESC

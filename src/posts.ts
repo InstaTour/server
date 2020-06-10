@@ -25,6 +25,7 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
 import { Query, tx, toNumber, toDateString } from './modules/neo4j';
+import { User, UserNode } from './modules/neo4j/types';
 import {
   Sections,
   Post,
@@ -177,6 +178,7 @@ router.get('/:pid', async (ctx) => {
     post: null as Post | null,
     avg_rates: 0,
     reviews: 0,
+    writer: null as User | null,
   };
   result.records.forEach((r) => {
     console.log(r);
@@ -187,16 +189,26 @@ router.get('/:pid', async (ctx) => {
     if (postsNode) {
       const post: Post = postsNode.properties;
       post.likes = toNumber(post.likes) || 0;
+      post.views = toNumber(post.views) || 0;
       post.date = toDateString(post.date);
 
       res.post = post;
     }
 
-    const avg_rates: number = r.get('avg_rates');
-    res.avg_rates = avg_rates;
+    const avg_rates: Integer = r.get('avg_rates');
+    res.avg_rates = toNumber(avg_rates);
 
     const reviews: Integer = r.get('reviews');
     res.reviews = toNumber(reviews);
+
+    const writerNode: UserNode = r.get('writer');
+    const writer: User = writerNode.properties;
+    delete writer.updated_at;
+    delete writer.created_at;
+    delete writer.email;
+    writer.posting = toNumber(writer.posting) || 0;
+
+    res.writer = writer;
   });
 
   // 결과값 반환
