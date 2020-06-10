@@ -1,5 +1,5 @@
 export const enum Query {
-  create_user = 'CREATE (:User {id: $uid, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME()})',
+  create_user = 'CREATE (:User {id: $uid, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME(), updated_at: DATETIME()})',
   create_post_instagram = 'CREATE (:Post:Instagram {id: $key, img_url: $img_url, content: $content, likes: $likes, date: $date})',
   create_post_instatour = `MATCH (user:User {id: $uid})
                           MATCH (tag:HashTag {id: $hid})
