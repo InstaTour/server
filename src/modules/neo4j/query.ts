@@ -17,19 +17,25 @@ export const enum Query {
   post_hashtag_relation = `MATCH (p:Post {id: $pid}) 
                           MERGE (t:HashTag {id: $tid}) 
                           MERGE (p)-[:TAGGED]->(t)`,
-  search_with_hashtag = `MATCH (post:Post)-[:TAGGED]->(hashtag:HashTag {id: $hid})
-                        OPTIONAL MATCH (user:User {id: $uid})-[hearted:HEARTED]->(post)
+  search_with_hashtag = `MATCH (user:User {id: $uid})
+                        MATCH (post:Post)-[rel:TAGGED]->(hashtag:HashTag {id: $hid})
+                        WITH user, post, hashtag, (CASE
+                        WHEN 'SEC_ALL' = $section THEN true
+                        WHEN rel.section = $section THEN true
+                        ELSE false
+                        END) AS inSection
+                        WHERE inSection = true
+                        OPTIONAL MATCH (user)-[hearted:HEARTED]->(post)
                         OPTIONAL MATCH (user)-[rated:RATED]->(post)
-                        WITH post, hearted, rated
-                        ORDER BY hearted, post.likes DESC
-                        WITH COLLECT(post {.*, hearted: hearted, rated: rated}) AS postlist
-                        RETURN postlist[$skip..$skip+$limit] AS posts, SIZE(postlist) AS num`,
+                        WITH user, hashtag, post, hearted, rated
+                        ORDER BY hearted, post.views DESC, post.likes DESC
+                        WITH user, hashtag, COLLECT(post {.*, hearted: hearted, rated: rated}) as postlist
+                        CREATE (user)-[:CLICKED {created_at: DATETIME()}]->(hashtag)
+                        RETURN postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num`,
   get_user = `MATCH (user:User {id: $uid})
               RETURN user`,
-  get_post = `MATCH (n:User {id: $uid})
-              MATCH (post:Post {id: $pid})
-              MATCH (post)<-[r:RATED]-()
-              CREATE (n)-[:CLICKED {created_at: DATETIME()}]->(post)
+  get_post = `MATCH (post:Post {id: $pid})<-[r:RATED]-()
+              CALL apoc.atomic.add(post, 'views', 1) YIELD oldValue, newValue
               RETURN post, AVG(r.rates) as avg_rates, COUNT(r) as reviews`,
   get_user_heart = `MATCH (user:User {id: $uid})-[r:HEARTED]->(post)
                     WITH user, post, r

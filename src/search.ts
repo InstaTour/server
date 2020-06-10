@@ -45,7 +45,7 @@ import { getUserInfo } from './modules/cognito';
  * Method: get
  */
 
-/* 테스트용 이미지 가져오기 */
+/* 해시태그 검색 */
 router.get('/', async (ctx) => {
   // 함수 호출위치 로그
   console.log(ctx.request.url, ctx.request.method);
@@ -111,6 +111,7 @@ router.get('/', async (ctx) => {
 
         node.date = toDateString(node.date);
         node.likes = toNumber(node.likes) || 0;
+        node.views = toNumber(node.views) || 0;
 
         res.posts.push(node);
       });
