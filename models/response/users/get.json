@@ -19,6 +19,9 @@
             "email": {
               "type": "string"
             },
+            "posting": {
+              "type": "number"
+            },
             "created_at": {
               "type": "string"
             },

@@ -71,6 +71,8 @@ router.get('/', async (ctx) => {
       user.created_at = toDateString(user.created_at);
       user.updated_at = toDateString(user.updated_at);
 
+      user.posting = toNumber(user.posting) || 0;
+
       res.user = user;
     }
   });

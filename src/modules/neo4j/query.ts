@@ -1,12 +1,13 @@
 export const enum Query {
-  create_user = 'CREATE (:User {id: $uid, nickname: $nickname, email: $email, profile: $profile, created_at: DATETIME(), updated_at: DATETIME()})',
+  create_user = 'CREATE (:User {id: $id, nickname: $nickname, email: $email, profile: $profile, posting: 0, created_at: DATETIME(), updated_at: DATETIME()})',
   create_post_instagram = 'CREATE (:Post:Instagram {id: $key, img_url: $img_url, content: $content, likes: $likes, date: $date})',
   create_post_instatour = `MATCH (user:User {id: $uid})
                           MATCH (tag:HashTag {id: $hid})
                           CREATE (user)-[:POSTED]->(post:Post:InstaTour {id: apoc.create.uuid(), img_url: $img_url, content: $content, likes: 0, date: DATETIME()})
-                          WITH post, tag
+                          WITH user, post, tag
                           CALL apoc.create.relationship(post, $section, {}, tag)
                           YIELD rel
+                          CALL apoc.atomic.add(user, 'posting', 1) YIELD oldValue, newValue
                           RETURN post`,
   update_user = `MATCH (p:User {id: $uid})
                 CALL apoc.create.setProperties(p, $keys, $values) YIELD node 

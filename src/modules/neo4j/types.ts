@@ -26,6 +26,7 @@ export interface User {
   nickname: string;
   profile: string;
   email: string;
+  posting: Number;
 }
 
 export interface PostNode extends Node {
