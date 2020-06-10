@@ -47,6 +47,10 @@ export const enum Query {
                     WITH user, post, r
                     ORDER BY r.created_at DESC
                     RETURN user, COLLECT(post) as posts`,
+  get_user_posting = `MATCH (user:User {id: $uid})-[r:POSTED]->(post)
+                      WITH user, post, r
+                      ORDER BY r.created_at DESC
+                      RETURN user, COLLECT(post) as posts`,
   delete_user = `MATCH (user:User {id: $id})
                 DETACH DELETE user
                 RETURN user`,

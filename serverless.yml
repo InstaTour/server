@@ -370,6 +370,11 @@ functions:
               - statusCode: '200'
                 responseModels:
                   'application/json': UsersHeartGetResponse
+      - http:
+          path: /users/posting
+          method: get
+          cors: true
+          authorizer: ${self:custom.myAuthorizer}
   # Post
   posts:
     handler: src/posts.handler
