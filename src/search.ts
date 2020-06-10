@@ -24,7 +24,14 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 
 // Neo4j 연결
-import { tx, Query, toNumber, int, isSections } from './modules/neo4j';
+import {
+  tx,
+  Query,
+  toNumber,
+  int,
+  isSections,
+  toDateString,
+} from './modules/neo4j';
 import {
   Post,
   Integer,
@@ -102,7 +109,7 @@ router.get('/', async (ctx) => {
           ? (node.rated as RatedRelationship).properties.rates
           : 0;
 
-        node.date = node.date.toString();
+        node.date = toDateString(node.date);
         node.likes = toNumber(node.likes) || 0;
 
         res.posts.push(node);

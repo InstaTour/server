@@ -24,7 +24,7 @@ const awsSdk = captureAWS(rawAWS);
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
-import { Query, tx, toNumber } from './modules/neo4j';
+import { Query, tx, toNumber, toDateString } from './modules/neo4j';
 import { Sections, Post, PostNode, Integer } from './modules/neo4j/types';
 
 /**
@@ -125,7 +125,7 @@ router.post('/', bodyParser(), async (ctx) => {
       post.likes = toNumber(post.likes) || 0;
       post.rated = null;
       post.hearted = null;
-      post.date = post.date.toString();
+      post.date = toDateString(post.date);
 
       res.post = post;
     }
@@ -184,7 +184,7 @@ router.get('/:pid', async (ctx) => {
     if (postsNode) {
       const post: Post = postsNode.properties;
       post.likes = toNumber(post.likes) || 0;
-      post.date = post.date.toString();
+      post.date = toDateString(post.date);
 
       res.post = post;
     }

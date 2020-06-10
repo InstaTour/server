@@ -23,9 +23,8 @@ const awsSdk = captureAWS(rawAWS);
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
-import { tx, Query, int } from './modules/neo4j';
+import { tx, Query, int, toNumber, toDateString } from './modules/neo4j';
 import { Post } from './modules/neo4j/types';
-import { toNumber } from './modules/neo4j/neo4j';
 
 /**
  * Route: /stats/clcik
@@ -75,7 +74,7 @@ router.get('/click', async (ctx) => {
     console.log('postsNodes', postsNodes);
     if (postsNodes) {
       postsNodes.forEach((node) => {
-        node.date = node.date.toString();
+        node.date = toDateString(node.date);
         node.views = toNumber(node.views) || 0;
         node.likes = toNumber(node.likes) || 0;
 
