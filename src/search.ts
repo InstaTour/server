@@ -24,7 +24,14 @@ const awsSdk = captureAWS(rawAWS);
 import { createResponse, statusCode } from './modules/util';
 
 // Neo4j 연결
-import { tx, Query, toNumber, int, isSections } from './modules/neo4j';
+import {
+  tx,
+  Query,
+  toNumber,
+  int,
+  isSections,
+  toDateString,
+} from './modules/neo4j';
 import {
   Post,
   Integer,
@@ -38,7 +45,7 @@ import { getUserInfo } from './modules/cognito';
  * Method: get
  */
 
-/* 테스트용 이미지 가져오기 */
+/* 해시태그 검색 */
 router.get('/', async (ctx) => {
   // 함수 호출위치 로그
   console.log(ctx.request.url, ctx.request.method);
@@ -102,8 +109,9 @@ router.get('/', async (ctx) => {
           ? (node.rated as RatedRelationship).properties.rates
           : 0;
 
-        node.date = node.date.toString();
+        node.date = toDateString(node.date);
         node.likes = toNumber(node.likes) || 0;
+        node.views = toNumber(node.views) || 0;
 
         res.posts.push(node);
       });

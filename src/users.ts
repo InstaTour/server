@@ -23,7 +23,7 @@ const awsSdk = captureAWS(rawAWS);
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
-import { tx, Query, toNumber } from './modules/neo4j';
+import { tx, Query, toNumber, toDateString } from './modules/neo4j';
 import { User, UserNode, Post, PostNode } from './modules/neo4j/types';
 
 /**
@@ -68,8 +68,10 @@ router.get('/', async (ctx) => {
     console.log('userNode', userNode);
     if (userNode) {
       const user: User = userNode.properties;
-      user.created_at = user.created_at.toString();
-      user.updated_at = user.updated_at.toString();
+      user.created_at = toDateString(user.created_at);
+      user.updated_at = toDateString(user.updated_at);
+
+      user.posting = toNumber(user.posting) || 0;
 
       res.user = user;
     }
@@ -151,7 +153,7 @@ router.get('/heart', async (ctx) => {
     if (posts) {
       posts.forEach((node) => {
         const post: Post = node.properties;
-        post.date = post.date.toString();
+        post.date = toDateString(post.date);
 
         post.likes = toNumber(post.likes) || 0;
 

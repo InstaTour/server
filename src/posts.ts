@@ -24,8 +24,14 @@ const awsSdk = captureAWS(rawAWS);
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
-import { Query, tx, toNumber } from './modules/neo4j';
-import { Sections, Post, PostNode, Integer } from './modules/neo4j/types';
+import { Query, tx, toNumber, toDateString } from './modules/neo4j';
+import {
+  Sections,
+  Post,
+  PostNode,
+  Integer,
+  isSections,
+} from './modules/neo4j/types';
 
 /**
  * Route: /posts
@@ -54,7 +60,9 @@ router.post('/', bodyParser(), async (ctx) => {
 
   // 파라미터 가져오기
   const location = ctx.request.body.location;
-  let section: Sections = ctx.request.body.section || 'SEC_ALL';
+  let section: Sections = isSections(ctx.request.body.section)
+    ? ctx.request.body.section
+    : 'SEC_ALL';
   const img_url =
     ctx.request.body.img_url || 'https://s3.instatour.tech/blank.jpg';
   const content = ctx.request.body.content || '';
@@ -76,11 +84,6 @@ router.post('/', bodyParser(), async (ctx) => {
 
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
-
-  // 섹션 SEC_ALL은 TAGGED로 쿼리한다.
-  if (section == 'SEC_ALL') {
-    section = 'TAGGED';
-  }
 
   // 쿼리 보내기
   const results = await tx(
@@ -125,7 +128,7 @@ router.post('/', bodyParser(), async (ctx) => {
       post.likes = toNumber(post.likes) || 0;
       post.rated = null;
       post.hearted = null;
-      post.date = post.date.toString();
+      post.date = toDateString(post.date);
 
       res.post = post;
     }
@@ -184,7 +187,7 @@ router.get('/:pid', async (ctx) => {
     if (postsNode) {
       const post: Post = postsNode.properties;
       post.likes = toNumber(post.likes) || 0;
-      post.date = post.date.toString();
+      post.date = toDateString(post.date);
 
       res.post = post;
     }

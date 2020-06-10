@@ -26,6 +26,17 @@ export interface User {
   nickname: string;
   profile: string;
   email: string;
+  posting: Number;
+}
+
+export interface HashTagNode extends Node {
+  properties: HashTag;
+}
+
+export interface HashTag {
+  id: string;
+  section: string;
+  views?: Number | Integer;
 }
 
 export interface PostNode extends Node {

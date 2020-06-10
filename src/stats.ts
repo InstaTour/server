@@ -23,9 +23,8 @@ const awsSdk = captureAWS(rawAWS);
 // util 가져오기
 import { createResponse, statusCode } from './modules/util';
 import { getUserInfo } from './modules/cognito';
-import { tx, Query, int } from './modules/neo4j';
-import { Post } from './modules/neo4j/types';
-import { toNumber } from './modules/neo4j/neo4j';
+import { tx, Query, int, toNumber } from './modules/neo4j';
+import { HashTag } from './modules/neo4j/types';
 
 /**
  * Route: /stats/clcik
@@ -65,19 +64,17 @@ router.get('/click', async (ctx) => {
 
   // 결과 파싱하여 넣기
   let res = {
-    posts: [] as Post[],
+    posts: [] as HashTag[],
   };
   result.records.forEach((r) => {
     console.log(r);
 
     // 게시글 결과 가져오기
-    const postsNodes: Post[] = r.get('posts');
-    console.log('postsNodes', postsNodes);
-    if (postsNodes) {
-      postsNodes.forEach((node) => {
-        node.date = node.date.toString();
+    const tagsNodes: HashTag[] = r.get('hashtags');
+    console.log('tagsNodes', tagsNodes);
+    if (tagsNodes) {
+      tagsNodes.forEach((node) => {
         node.views = toNumber(node.views) || 0;
-        node.likes = toNumber(node.likes) || 0;
 
         res.posts.push(node);
       });

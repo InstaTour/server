@@ -44,3 +44,17 @@ export function toNumber(num: any) {
   else if (neo4j.integer.inSafeRange(num)) return num.toNumber();
   else return null;
 }
+
+export function toDateString(str: any) {
+  if (typeof str == 'string') return str;
+  else {
+    return new Date(
+      toNumber(str.year),
+      toNumber(str.month) - 1,
+      toNumber(str.day),
+      toNumber(str.hour),
+      toNumber(str.minute),
+      toNumber(str.second)
+    ).toISOString();
+  }
+}
