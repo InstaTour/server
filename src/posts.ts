@@ -127,6 +127,7 @@ router.post('/', bodyParser(), async (ctx) => {
     if (postsNode) {
       const post: Post = postsNode.properties;
       post.likes = toNumber(post.likes) || 0;
+      post.views = toNumber(post.views) || 0;
       post.rated = null;
       post.hearted = null;
       post.date = toDateString(post.date);
