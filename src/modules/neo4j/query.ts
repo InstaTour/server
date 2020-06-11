@@ -31,7 +31,9 @@ export const enum Query {
                         ORDER BY hearted, post.views DESC, post.likes DESC
                         WITH user, hashtag, COLLECT(post {.*, hearted: hearted, rated: rated}) as postlist
                         CREATE (user)-[:CLICKED {created_at: DATETIME()}]->(hashtag)
-                        RETURN postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num`,
+                        WITH postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num, hashtag
+                        SET hashtag.apx_num = num
+                        RETURN posts, num, hashtag`,
   get_user = `MATCH (user:User {id: $uid})
               RETURN user`,
   get_post = `MATCH (post:Post {id: $pid})

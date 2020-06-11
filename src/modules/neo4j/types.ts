@@ -37,6 +37,7 @@ export interface HashTag {
   id: string;
   section: string;
   views?: Number | Integer;
+  apx_num?: Number | Integer;
 }
 
 export interface PostNode extends Node {

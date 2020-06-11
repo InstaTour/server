@@ -75,6 +75,7 @@ router.get('/click', async (ctx) => {
     if (tagsNodes) {
       tagsNodes.forEach((node) => {
         node.views = toNumber(node.views) || 0;
+        node.apx_num = toNumber(node.apx_num) || 0;
 
         res.hashtags.push(node);
       });

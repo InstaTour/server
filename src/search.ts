@@ -39,6 +39,7 @@ import {
   RatedRelationship,
 } from './modules/neo4j/types';
 import { getUserInfo } from './modules/cognito';
+import { HashTag, HashTagNode } from './modules/neo4j/types';
 
 /**
  * Route: /search
@@ -95,6 +96,7 @@ router.get('/', async (ctx) => {
   let res = {
     posts: [] as Post[],
     num: 0 as number,
+    apx_num: 0 as number,
   };
   result.records.forEach((r) => {
     console.log(r);
@@ -132,6 +134,11 @@ router.get('/', async (ctx) => {
         'Result number is Invalid'
       );
     } else res.num = num;
+
+    // 해시태그에서 정보 가져오기
+    const hashtagNode: HashTagNode = r.get('hashtag');
+    const hashtag: HashTag = hashtagNode.properties;
+    res.apx_num = toNumber(hashtag.apx_num) || 0;
   });
 
   // 결과값 반환
