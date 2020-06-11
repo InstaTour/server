@@ -68,8 +68,8 @@ router.get('/', async (ctx) => {
     console.log('userNode', userNode);
     if (userNode) {
       const user: User = userNode.properties;
-      user.created_at = toDateString(user.created_at);
-      user.updated_at = toDateString(user.updated_at);
+      delete user.created_at;
+      delete user.updated_at;
 
       user.posting = toNumber(user.posting) || 0;
 
