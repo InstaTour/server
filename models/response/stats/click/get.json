@@ -20,6 +20,9 @@
               },
               "views": {
                 "type": "integer"
+              },
+              "apx_num": {
+                "type": "integer"
               }
             }
           }
