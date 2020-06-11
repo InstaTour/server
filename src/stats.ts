@@ -77,6 +77,9 @@ router.get('/click', async (ctx) => {
         node.views = toNumber(node.views) || 0;
         node.apx_num = toNumber(node.apx_num) || 0;
 
+        if (typeof node.img_url == 'object') {
+          node.img_url = node.img_url[0];
+        }
         res.hashtags.push(node);
       });
     }

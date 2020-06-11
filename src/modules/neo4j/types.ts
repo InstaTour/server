@@ -38,6 +38,7 @@ export interface HashTag {
   section: string;
   views?: Number | Integer;
   apx_num?: Number | Integer;
+  img_url?: String | Array<String>;
 }
 
 export interface PostNode extends Node {
