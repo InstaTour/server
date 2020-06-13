@@ -311,7 +311,7 @@ router.put('/:pid/rates', bodyParser(), async (ctx) => {
       ctx,
       statusCode.requestError,
       null,
-      'Body (rate) is undefined'
+      'Body (rates) is undefined'
     );
   }
 
