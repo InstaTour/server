@@ -64,8 +64,9 @@ router.post('/', bodyParser(), async (ctx) => {
   let section: Sections = isSections(ctx.request.body.section)
     ? ctx.request.body.section
     : 'SEC_ALL';
-  const img_url =
-    ctx.request.body.img_url || 'https://s3.instatour.tech/blank.jpg';
+  let img_url = ctx.request.body.img_url || [
+    'https://s3.instatour.tech/blank.jpg',
+  ];
   const content = ctx.request.body.content || '';
   console.log('[Parameter]', { location, img_url, content });
 
@@ -81,7 +82,9 @@ router.post('/', bodyParser(), async (ctx) => {
   }
 
   // img_url의 배열 파싱
-  const img_array = JSON.parse(img_url.replace(/'/g, '"'));
+  if (typeof img_url == 'string') {
+    img_url = JSON.parse(img_url.replace(/'/g, '"'));
+  }
 
   // Cognito에서 유저 가져오기
   const user = getUserInfo(ctx);
@@ -94,7 +97,7 @@ router.post('/', bodyParser(), async (ctx) => {
         hid: location,
         uid: user.username,
         section,
-        img_url: img_array,
+        img_url,
         content,
       },
     ]
