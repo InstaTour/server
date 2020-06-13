@@ -75,6 +75,15 @@ router.get('/click', async (ctx) => {
     if (tagsNodes) {
       tagsNodes.forEach((node) => {
         node.views = toNumber(node.views) || 0;
+        node.apx_num = toNumber(node.apx_num) || 0;
+
+        if (typeof node.img_url == 'object') {
+          node.img_url = node.img_url[0];
+        }
+
+        if (node.relatives) {
+          node.relatives = node.relatives.splice(0, 4);
+        }
 
         res.hashtags.push(node);
       });

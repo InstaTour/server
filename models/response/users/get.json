@@ -24,12 +24,6 @@
             },
             "posting": {
               "type": "number"
-            },
-            "created_at": {
-              "type": "string"
-            },
-            "updated_at": {
-              "type": "string"
             }
           }
         }

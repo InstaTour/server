@@ -41,6 +41,15 @@
         },
         "num": {
           "type": "integer"
+        },
+        "apx_num": {
+          "type": "integer"
+        },
+        "relatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

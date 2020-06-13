@@ -20,6 +20,15 @@
               },
               "views": {
                 "type": "integer"
+              },
+              "relatives": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "apx_num": {
+                "type": "integer"
               }
             }
           }
