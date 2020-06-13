@@ -96,6 +96,7 @@ router.get('/', async (ctx) => {
   let res = {
     posts: [] as Post[],
     num: 0 as number,
+    relatives: null as String[] | null,
     apx_num: 0 as number,
   };
   result.records.forEach((r) => {
@@ -139,6 +140,10 @@ router.get('/', async (ctx) => {
     const hashtagNode: HashTagNode = r.get('hashtag');
     const hashtag: HashTag = hashtagNode.properties;
     res.apx_num = toNumber(hashtag.apx_num) || 0;
+
+    if (hashtag.relatives) {
+      res.relatives = hashtag.relatives;
+    }
   });
 
   // 결과값 반환

@@ -80,6 +80,11 @@ router.get('/click', async (ctx) => {
         if (typeof node.img_url == 'object') {
           node.img_url = node.img_url[0];
         }
+
+        if (node.relatives) {
+          node.relatives = node.relatives.splice(0, 4);
+        }
+
         res.hashtags.push(node);
       });
     }

@@ -37,6 +37,7 @@ export interface HashTag {
   id: string;
   section: string;
   views?: Number | Integer;
+  relatives?: Array<String>;
   apx_num?: Number | Integer;
   img_url?: String | Array<String>;
 }
