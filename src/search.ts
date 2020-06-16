@@ -76,7 +76,7 @@ router.get('/', async (ctx) => {
   // 쿼리 보내기
   const results = await tx(
     [Query.search_with_hashtag],
-    [{ hid: location, uid: user.username, section, limit, skip }]
+    [{ hid: location.toLowerCase(), uid: user.username, section, limit, skip }]
   );
   console.log('results', results);
 

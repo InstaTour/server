@@ -94,7 +94,7 @@ router.post('/', bodyParser(), async (ctx) => {
     [Query.create_post_instatour],
     [
       {
-        hid: location,
+        hid: location.toLowerCase(),
         uid: user.username,
         section,
         img_url,
