@@ -18,22 +18,31 @@ export const enum Query {
                           MERGE (t:HashTag {id: $tid}) 
                           MERGE (p)-[:TAGGED]->(t)`,
   search_with_hashtag = `MATCH (user:User {id: $uid})
-                        MATCH (post:Post)-[rel:TAGGED]->(hashtag:HashTag {id: $hid})
-                        WITH user, post, hashtag, (CASE
+                        MATCH (tag1:HashTag {id: $hid})
+                        OPTIONAL MATCH (tag1)-[:TRANSLATED]-(tag2:HashTag)
+                        WITH user, COLLECT(tag1) + COLLECT(tag2) AS hashtaglist
+                        CREATE (user)-[:CLICKED {created_at: DATETIME()}]->(tag1)
+                        WITH user, hashtaglist
+                        UNWIND(hashtaglist) AS hashtags
+                        WITH DISTINCT hashtags, user
+                        MATCH (hashtags)-[rel:TAGGED]-(post:Post)
+                        WITH hashtags, post, (CASE
                         WHEN 'SEC_ALL' = $section THEN true
                         WHEN rel.section = $section THEN true
                         ELSE false
-                        END) AS inSection
+                        END) AS inSection, user
                         WHERE inSection = true
                         OPTIONAL MATCH (user)-[hearted:HEARTED]->(post)
                         OPTIONAL MATCH (user)-[rated:RATED]->(post)
-                        WITH user, hashtag, post, hearted, rated
+                        WITH hashtags, post, hearted, rated
                         ORDER BY hearted, post.views DESC, post.likes DESC
-                        WITH user, hashtag, COLLECT(post {.*, hearted: hearted, rated: rated}) as postlist
-                        CREATE (user)-[:CLICKED {created_at: DATETIME()}]->(hashtag)
-                        WITH postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num, hashtag
-                        SET hashtag.apx_num = num
-                        RETURN posts, num, hashtag`,
+                        WITH COLLECT(DISTINCT hashtags) AS hashtaglist, COLLECT(DISTINCT post {.*, hearted: hearted, rated: rated}) as postlist
+                        WITH postlist[$skip..$skip+$limit] as posts, SIZE(postlist) as num, hashtaglist
+                        UNWIND(hashtaglist) as hashtags
+                        SET hashtags.apx_num = num
+                        WITH hashtags, posts, num
+                        WHERE hashtags.id = $hid
+                        RETURN hashtags as hashtag, posts, num`,
   get_user = `MATCH (user:User {id: $uid})
               RETURN user`,
   get_post = `MATCH (post:Post {id: $pid})
