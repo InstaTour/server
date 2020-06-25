@@ -83,13 +83,14 @@ export const enum Query {
   stats_top_click = `MATCH (tag:HashTag)<-[r:CLICKED]-()
                     WHERE date(datetime({epochmillis:apoc.date.add(timestamp(), 'ms', -30, 'd')})) <= date(datetime(r.created_at)) <=date()
                     WITH tag, COUNT(r) AS views
-                    ORDER BY views DESC
+                    ORDER BY views DESC LIMIT 5
                     MATCH (tag)<-[:TAGGED]-(post:Post)
                     WITH tag, views, post
-                    ORDER BY post.views DESC
+                    ORDER BY views DESC, post.views DESC
                     WITH tag, views, COLLECT(post)[0] as thumbnail
                     WITH COLLECT(tag {.*, views: views, img_url: thumbnail.img_url}) as taglist
-                    RETURN taglist[0..5] as hashtags`,
+                    WITH taglist[0..5] as hashtags
+                    RETURN hashtags`,
   stats_top_posting = `MATCH (user:User)
                       WITH user
                       ORDER BY user.posting DESC
