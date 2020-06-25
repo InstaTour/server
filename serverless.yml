@@ -25,6 +25,7 @@ provider:
   runtime: nodejs12.x
   stage: ${env:STAGE}
   region: ap-northeast-2
+  timeout: 30
   tracing: true
   iamRoleStatements:
     - Effect: 'Allow' # xray permissions (required)
